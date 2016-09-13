@@ -1,3 +1,20 @@
+<script>
+(function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+ga('create', 'UA-58621690-1', 'auto');
+ga('send', 'pageview');
+</script>
+
 # CS-241 - Foundation of Sequential Programs
 ## Fall 2016
 ### Notes by Daniel Prilik - SE 2020
@@ -124,7 +141,7 @@ It is `10` if it's an unsigned number, but it's `-6` in 2s compliment
 #### Characters
 Typically represented with **8 Bits**
 
-Eg: `00001010` is `\n` in ASCII
+Eg: `00001010` is `\n` in ASCII (use the linux command `man ascii` for a full table)
 
 ## Hexadecimal
 
@@ -138,3 +155,103 @@ A nice property of Hexadecimal is that it is easy to convert into Binary, and vi
 You just split the binary number into chunks of 4 bits, and then write the digit associated with each chunk.
 
 Eg: `1010 1111 1001 1001` = `xAF99`
+
+# Lecture 2
+
+## Grouping of Bits
+
+The most common grouping of bits is in a **byte**, or a group of **8 bits**
+
+There are **256** possible values that can be encoded by 8 bits. What to encode however, is up to interpretation (see above)
+
+## Files
+
+Files are just long sequences of bytes, and it is up to a program to determine what the byte sequences actually mean.
+
+The command `cat` for example, will interpret any file thrown at it as Text, and print out each byte as a ASCII char.
+
+The command `xxd` on the other hand, will print the file's bits as hexadecimal values (alongside an ascii interpretation of the bits)
+
+So, for example, if there is a file `hasY` with string `Y\n`, then the output of `xxd` would be something like:
+
+```
+#Addr     #Hex   #Ascii
+00000000: 590a   Y.
+```
+
+`59` is the hex code for `Y` in ascii, and `0a` is the hex code for the Newline Char in ascii
+
+## Words
+
+A **Word** is a grouping a bits that a specific CPU "likes" (i.e: can easily do math on, execute ops, etc...)
+
+Words can be any number of bits... from **8 bit** in the 80s, all the way to **64 bit** nowadays.
+
+NOTE: a CPU's specific word-size will limit the total ammount of memory a CPU can ever see! For example, 32 bit CPUs could only address ~3.5gigs of memory, so until the switch to 64 bit CPUS, no matter how much RAM you shoved in a PC, if the OS was 32bit, it couldn't see more than 3.5gigs
+
+## Our Machine
+
+The machine we are using in cs241 is a **Stored Program Computer**
+
+What this means is that the CPU is connected to the Memory (via a "mem bus") not just to use the memory as a place to store data, but also as a place to store actual program code.
+
+To run a program, the CPU calls the memory for an instruction, and the memory returns a string of bits that (should) correspond to a instruction that the CPU can execute.
+
+## CPU
+
+CPUs are not actually just magic boxes. They have things within them that make them work...
+
+There are several places to Store things
+- **Program Counter (PC)**- Where in memory to load new instructions from
+- **Instruction Register (IR)**- Chunk of memory that holds the instruction to run
+- **Registers 0-31 ($0 -> $31)** - "boxes" that can store words of information (think superfast ram)
+
+And there are other places that Do things
+- **Control Unit** - reads the PC, retrieves the instruction from memory, puts that instruction in the IR, and then executes the instruction
+- **Arithmetic Logic Unit (ALU)** - Can do maths on given bits. Things like adding, subtracting, AND / OR / NOTs, etc...
+
+## Memory (RAM)
+
+RAM is really just a giant block of "boxes" that can store bytes, starting from 0 to denote the 1st byte, 4 to denote the 5th byte, etc...
+
+On a MIPS machine, words are 4 bytes, and as such, when addressing the RAM to ask for instructions, we must ask for words, so we address RAM in increments of 4.
+
+## MIPS
+
+MIPS is a set of instructions that our processor understands. 
+
+In this course, there are **18** different ** 32-bit (4 byte)** instructions encoded in 2 basic instruction formats.
+
+**MIPS assembler** is the **Assembly Language** that translates human-readable instructions into the actual 32-bit / 1 word instructions that the CPU can read.
+
+For example:
+- `add $1, $2, $3` are **MIPS instructions** that correspond to...
+- `0000 0000 0100 0011 0000 1000 0010 0000` when converted to **Binary**, or 
+- `0x00430820` when written in **Hex**
+
+That binary actually means the following...
+```
+000000      ; Call the ALU
+00010       ; $2
+00011       ; $3
+00001       ; $1
+00000100000 ; Add
+```
+
+A full list of MIPS instructions can be found here: https://www.student.cs.uwaterloo.ca/~cs241/mips/mipsref.pdf
+
+## Loading and Storing values to / from RAM
+
+The instruction `lw` loads a word from memory, and `sw` stores a word to memory
+
+Eg: `lw $7, 0($3)` will load the value at MEM[$3] into register $7
+Eg: `sw $8, 4($3)` will load the value from $8 to MEM[$3+4] (that +4 is needed since we store Words in memory, and Words are 4 bytes each)
+
+## Main Machine Cycle
+
+Every single clock cycle, the following happens:
+
+1) Fetch a word from RAM whose address is in the PC (the PC is initialized to 0 on power-on)
+2) Place that word in the IR
+3) Increment the PC by 4
+4) Decode and Execute the instruction that is in the IR
