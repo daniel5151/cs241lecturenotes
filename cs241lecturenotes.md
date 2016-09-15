@@ -255,3 +255,19 @@ Every single clock cycle, the following happens:
 2) Place that word in the IR
 3) Increment the PC by 4
 4) Decode and Execute the instruction that is in the IR
+
+# Lecture 3
+
+## Special Registers
+
+Register | Description
+--- | ---
+`$0`  | Constant **value 0**
+`$29 and $30` | **Stack** (see below...)
+`$31` | The **Return Address (RA)**
+
+## Assembly Code
+
+There is a 1 to 1 correspondance b/w Assembly Language and Machine Language. It translates human-friendlier mnemonic instructions like `add $3, $1, $2` to their related bit form. The **Assembler** is the program that does this automatic translation.
+
+For some example of Assembly Code and the Machine Language equivilents, see the cs241 website.
