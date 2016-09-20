@@ -11,7 +11,7 @@
 <body class="markdown github">
 <h1 id="cs-241---foundation-of-sequential-programs"><a name="cs-241---foundation-of-sequential-programs" href="#cs-241---foundation-of-sequential-programs"></a>CS-241 - Foundation of Sequential Programs</h1><h2 id="fall-2016"><a name="fall-2016" href="#fall-2016"></a>Fall 2016</h2><h3 id="notes-by-daniel-prilik---se-2020"><a name="notes-by-daniel-prilik---se-2020" href="#notes-by-daniel-prilik---se-2020"></a>Notes by Daniel Prilik - SE 2020</h3><h1 id="instructor-info"><a name="instructor-info" href="#instructor-info"></a>Instructor info</h1><ul>
 <li>Matt Crane<ul>
-<li>Email: matt.crane@uwaterloo.ca</li><li>Office Hours: DC2555F 1:00 - 2:00pm Tues / Thurs</li></ul>
+<li>Email: matt.crane@uwaterloo.ca</li><li>Office Hours: DC2555F 3:00 - 4:00pm Tues / Thurs</li></ul>
 </li><li>Troy Vasiga<ul>
 <li>Email: troy.vasiga@uwaterloo.ca</li><li>Office Hours: DC3112 12:00 - 1:30pm Tues / Thurs</li></ul>
 </li><li>ISA: Max Bardakov <ul>
@@ -20,7 +20,7 @@
 <li>Syllabus</li><li>Announcements</li><li>Everyhing else!</li></ul><p>A note about Assignments:</p><ul>
 <li>Start early!</li><li>Don’t fall behind!</li><li>In total, there are 10 assignments, each with ~9 subparts, so ~100 things to submit</li></ul><p>The course uses our favorite program: <em>Marmoset!</em></p><ul>
 <li>This time around though, there are Release Tokens, that give you 3 attempts per 12h to test your programs</li></ul><p>Marking breakdown:</p><ul>
-<li>25% Assignments - Due thursdays at 9</li><li>25% Midterm - Wed Oct. 26th from 7:00-8:50pm</li><li>50% Final (must pass) - 2.5h sometime in december</li></ul><h2 id="idyllic-intro"><a name="idyllic-intro" href="#idyllic-intro"></a>Idyllic Intro</h2><p>So what is the purpose of this course:</p><ul>
+<li>25% Assignments - Due Thursdays at 7:00pm</li><li>25% Midterm - Wed Oct. 26th from 7:00-8:50pm</li><li>50% Final (must pass) - 2.5h sometime in December</li></ul><h2 id="idyllic-intro"><a name="idyllic-intro" href="#idyllic-intro"></a>Idyllic Intro</h2><p>So what is the purpose of this course:</p><ul>
 <li>To learn</li><li>To Meta-think</li><li>To write a program, that reads a program, that outputs a program.<ul>
 <li>Inception. BWUHHH</li></ul>
 </li></ul><p>By the end of this course, we will know what <em>really</em> happens when you compile and run a program, and there will be little to no mystery about what happens when you run a program.</p><h2 id="technical-intro"><a name="technical-intro" href="#technical-intro"></a>Technical Intro</h2><p>In this course, all a computer is a <strong>CPU</strong> and <strong>RAM</strong>.</p><p>A CPU <strong>Controls and Manipulates the Data</strong>, and the RAM is just a bunch of <strong>addressed “boxes” that store Data</strong>.</p><h2 id="binary-data"><a name="binary-data" href="#binary-data"></a>Binary Data</h2><p>All data is at a basic level is a sequence of 1s and 0s, or Bits</p><p>There are many interpretations for what a specific sequence of bits means (i.e: numbers, ascii, etc…), and there is no one “correct” interpretation.</p><h2 id="machine-language"><a name="machine-language" href="#machine-language"></a>Machine Language</h2><p>There are certain sequences of bits that do in-fact have one specific meaning, or at least they do when it comes to how the machine interprets them. Depending on the Achitecture of the machine (i.e: Intel/Motorola, 32/64bit, etc…) there may be different bit sequences that mean the same things.</p><p>These codes are great for machines, super easy, just 0 = off, 1 = off, but they SUCKS for humans.</p><h2 id="assembly"><a name="assembly" href="#assembly"></a>Assembly</h2><p><strong>Assembly</strong> on the other hand, sucks less for Humans.</p><p>It is a simple, textual representation of machine language. It is more human readable, and makes development less, shall we say, absolutely terrible.</p><p>A big plus of assembly is that is it pretty easy to translate Assembly to Machine Code. Assembly is just an <em>Abstraction</em>.</p><h2 id="assembler"><a name="assembler" href="#assembler"></a>Assembler</h2><p>The <strong>Assembler</strong> is the program that preforms the translation from Assembly to Machine Code. </p><h2 id="back-to-the-basics:-bits"><a name="back-to-the-basics:-bits" href="#back-to-the-basics:-bits"></a>Back to the Basics: Bits</h2><p>What is a Bit exactly?</p><p>Well, it is just a value that can have 2 states, either 1, or 0. That’s it.</p><p>The nice thing is that a <strong>sequence of bits</strong> can describle a lot of different value.</p><ul>
@@ -113,7 +113,254 @@
 <td>The <strong>Return Address (RA)</strong></td>
 </tr>
 </tbody>
-</table><h2 id="assembly-code"><a name="assembly-code" href="#assembly-code"></a>Assembly Code</h2><p>There is a 1 to 1 correspondance b/w Assembly Language and Machine Language. It translates human-friendlier mnemonic instructions like <code>add $3, $1, $2</code> to their related bit form. The <strong>Assembler</strong> is the program that does this automatic translation.</p><p>The rest of the class consisted of looking over some examples of machine language programs. The full list of examples looked at can be founf on the cs241 website.</p>
+</table><h2 id="assembly-code"><a name="assembly-code" href="#assembly-code"></a>Assembly Code</h2><p>There is a 1 to 1 correspondance b/w Assembly Language and Machine Language. It translates human-friendlier mnemonic instructions like <code>add $3, $1, $2</code> to their related bit form. The <strong>Assembler</strong> is the program that does this automatic translation.</p><p>For some example of Assembly Code and the Machine Language equivilents, see the cs241 website.</p><h1 id="lecture-4"><a name="lecture-4" href="#lecture-4"></a>Lecture 4</h1><h2 id="labels"><a name="labels" href="#labels"></a>Labels</h2><p>Labels identify an address.</p><pre><code class="language" data-origin="<pre><code class=&quot;language&quot;>; some stuff
+
+loop: add ...
+; more instructions...
+bne $2, $0, loop ;using label
+
+X: Y: ; can have 2 labels on the same line
+</code></pre>">; some stuff
+
+loop: add ...
+; more instructions...
+bne $2, $0, loop ;using label
+
+X: Y: ; can have 2 labels on the same line
+</code></pre><h2 id="storing-and-restoring-registers"><a name="storing-and-restoring-registers" href="#storing-and-restoring-registers"></a>Storing and Restoring Registers</h2><p>What happens if we call a subroutine where it uses some registers, that you need! We only have $32 registers after all!</p><p>Consider this example below</p><pre><code data-origin="<pre><code>; Example 6a: Calling a procedure
+sw $31, −4($30)        ; save $31 on stack
+lis $31
+.word 4
+sub $30, $30, $31
+lis $1                 ; call sumOneToN(13)
+.word sumOneToN
+lis $2
+.word 13
+jalr $1
+lis $31                ; restore $31 from stack
+.word 4
+add $30, $30, $31
+lw $31, −4($30)
+jr $31                 ; return to OS
+
+;------------------------
+
+; Example 6b: A procedure
+; sumOneToN: sum the integers from 1 to N
+; input: $2 is N
+; output: $3 is the sum
+
+sumOneToN:
+sw $1, −4($30)         ; save $1 on stack
+sw $2, −8($30)         ; save $2 on stack
+lis $1
+.word 8
+sub $30, $30, $1
+add $3, $0, $0         ; clear $3
+beginLoop:
+add $3, $3, $2         ; add $2 to $3
+lis $1                 ; decrement $2
+.word −1
+add $2, $2, $1
+bne $2, $0, beginLoop
+lis $1
+.word 8
+add $30, $30, $1
+lw $1, −4($30)         ; restore $1 from stack
+lw $2, −8($30)         ; restore $2 from stack
+jr $31                 ; return from sumOneToN
+</code></pre>">; Example 6a: Calling a procedure
+sw $31, −4($30)        ; save $31 on stack
+lis $31
+.word 4
+sub $30, $30, $31
+lis $1                 ; call sumOneToN(13)
+.word sumOneToN
+lis $2
+.word 13
+jalr $1
+lis $31                ; restore $31 from stack
+.word 4
+add $30, $30, $31
+lw $31, −4($30)
+jr $31                 ; return to OS
+
+;------------------------
+
+; Example 6b: A procedure
+; sumOneToN: sum the integers from 1 to N
+; input: $2 is N
+; output: $3 is the sum
+
+sumOneToN:
+sw $1, −4($30)         ; save $1 on stack
+sw $2, −8($30)         ; save $2 on stack
+lis $1
+.word 8
+sub $30, $30, $1
+add $3, $0, $0         ; clear $3
+beginLoop:
+add $3, $3, $2         ; add $2 to $3
+lis $1                 ; decrement $2
+.word −1
+add $2, $2, $1
+bne $2, $0, beginLoop
+lis $1
+.word 8
+add $30, $30, $1
+lw $1, −4($30)         ; restore $1 from stack
+lw $2, −8($30)         ; restore $2 from stack
+jr $31                 ; return from sumOneToN
+</code></pre><p>In general, Stack usage rules are:</p><pre><code data-origin="<pre><code>sw
+sw
+...
+sub $30, $30, 4.n
+[body]
+add $30, $30, 4.n
+lw
+lw
+jr $31
+</code></pre>">sw
+sw
+...
+sub $30, $30, 4.n
+[body]
+add $30, $30, 4.n
+lw
+lw
+jr $31
+</code></pre><h2 id="recursion"><a name="recursion" href="#recursion"></a>Recursion</h2><p>Here is an example of recursion</p><pre><code class="assembly" data-origin="<pre><code class=&quot;Assembly&quot;>; Save $31 on the stack
+sw $31, -4($30)
+lis $31
+.word 4
+sub $30, $30, $31
+
+; Call recSum(13)
+lis $4
+.word recSum
+lis $1
+.word 13
+jalr $4
+
+; Restore $31 from the stack
+lis $31
+.word 4
+add $30, $30, $31
+lw $31, -4($30)
+
+; Return to OS
+jr $31
+
+;-----------------------
+
+; recursively sum up the integers from 1 to N
+; assume that input (N) is in $1
+; output is returned in $3
+recSum:
+; Save registers on the stack
+sw $1, -4($30)
+sw $2, -8($30)
+sw $4, -12($30)
+sw $31, -16($30)
+lis $4
+.word 16
+sub $30, $30, $4
+; Initialize sum so far
+add $3, $0, $0
+; Check to see if we are in the base case (N=0)
+beq $1, $0, done
+; Otherwise, we must compute the sum of the current N
+; and the sum of the rest
+; keep a copy of the current value of N
+add $2, $1, $0
+; put N-1 into register $1
+lis $4
+.word 1
+sub $1, $1, $4
+; get ready to call routine (i.e., ourself)
+lis $4
+.word recSum
+jalr $4
+; add the value we got back to the current value of N (in $2)
+add $3, $3, $2
+done:
+; restore registers
+lis $4
+.word 16
+add $30, $30, $4
+lw $1, -4($30)
+lw $2, -8($30)
+lw $4, -12($30)
+lw $31, -16($30)
+jr $31
+</code></pre>">; Save $31 on the stack
+sw $31, -4($30)
+lis $31
+.word 4
+sub $30, $30, $31
+
+; Call recSum(13)
+lis $4
+.word recSum
+lis $1
+.word 13
+jalr $4
+
+; Restore $31 from the stack
+lis $31
+.word 4
+add $30, $30, $31
+lw $31, -4($30)
+
+; Return to OS
+jr $31
+
+;-----------------------
+
+; recursively sum up the integers from 1 to N
+; assume that input (N) is in $1
+; output is returned in $3
+recSum:
+; Save registers on the stack
+sw $1, -4($30)
+sw $2, -8($30)
+sw $4, -12($30)
+sw $31, -16($30)
+lis $4
+.word 16
+sub $30, $30, $4
+; Initialize sum so far
+add $3, $0, $0
+; Check to see if we are in the base case (N=0)
+beq $1, $0, done
+; Otherwise, we must compute the sum of the current N
+; and the sum of the rest
+; keep a copy of the current value of N
+add $2, $1, $0
+; put N-1 into register $1
+lis $4
+.word 1
+sub $1, $1, $4
+; get ready to call routine (i.e., ourself)
+lis $4
+.word recSum
+jalr $4
+; add the value we got back to the current value of N (in $2)
+add $3, $3, $2
+done:
+; restore registers
+lis $4
+.word 16
+add $30, $30, $4
+lw $1, -4($30)
+lw $2, -8($30)
+lw $4, -12($30)
+lw $31, -16($30)
+jr $31
+</code></pre><p>In general, the template for recursion in MIPS is roughly:</p><ul>
+<li>Save registers ($31 in particular)</li><li>Check base case</li><li>Recursive case:<ul>
+<li>Compute next value</li><li>Call self</li><li>Compute return value</li></ul>
+</li><li>Restore registers</li></ul>
 
 <footer style="position:fixed; font-size:.8em; text-align:right; bottom:0px; margin-left:-25px; height:20px; width:100%;">generated by <a href="http://pad.haroopress.com" target="_blank">haroopad</a></footer>
 </body>

@@ -22,7 +22,7 @@ ga('send', 'pageview');
 # Instructor info
 - Matt Crane
 	- Email: matt.crane@uwaterloo.ca
-	- Office Hours: DC2555F 1:00 - 2:00pm Tues / Thurs
+	- Office Hours: DC2555F 3:00 - 4:00pm Tues / Thurs
 - Troy Vasiga
 	- Email: troy.vasiga@uwaterloo.ca
 	- Office Hours: DC3112 12:00 - 1:30pm Tues / Thurs
@@ -49,9 +49,9 @@ The course uses our favorite program: _Marmoset!_
 - This time around though, there are Release Tokens, that give you 3 attempts per 12h to test your programs
 
 Marking breakdown:
-- 25% Assignments - Due thursdays at 9
+- 25% Assignments - Due Thursdays at 7:00pm
 - 25% Midterm - Wed Oct. 26th from 7:00-8:50pm
-- 50% Final (must pass) - 2.5h sometime in december
+- 50% Final (must pass) - 2.5h sometime in December
 
 ## Idyllic Intro
 
@@ -271,3 +271,167 @@ Register | Description
 There is a 1 to 1 correspondance b/w Assembly Language and Machine Language. It translates human-friendlier mnemonic instructions like `add $3, $1, $2` to their related bit form. The **Assembler** is the program that does this automatic translation.
 
 For some example of Assembly Code and the Machine Language equivilents, see the cs241 website.
+
+# Lecture 4
+
+## Labels
+
+Labels identify an address.
+
+```language
+; some stuff
+
+loop: add ...
+; more instructions...
+bne $2, $0, loop ;using label
+
+X: Y: ; can have 2 labels on the same line
+
+```
+
+## Storing and Restoring Registers
+
+What happens if we call a subroutine where it uses some registers, that you need! We only have $32 registers after all!
+
+Consider this example below
+
+```
+; Example 6a: Calling a procedure
+sw $31, −4($30)		; save $31 on stack
+lis $31
+.word 4
+sub $30, $30, $31
+lis $1 				; call sumOneToN(13)
+.word sumOneToN
+lis $2
+.word 13
+jalr $1
+lis $31				; restore $31 from stack
+.word 4
+add $30, $30, $31
+lw $31, −4($30)
+jr $31 				; return to OS
+
+;------------------------
+
+; Example 6b: A procedure
+; sumOneToN: sum the integers from 1 to N
+; input: $2 is N
+; output: $3 is the sum
+
+sumOneToN:
+sw $1, −4($30) 		; save $1 on stack
+sw $2, −8($30) 		; save $2 on stack
+lis $1
+.word 8
+sub $30, $30, $1
+add $3, $0, $0 		; clear $3
+beginLoop:
+add $3, $3, $2 		; add $2 to $3
+lis $1 				; decrement $2
+.word −1
+add $2, $2, $1
+bne $2, $0, beginLoop
+lis $1
+.word 8
+add $30, $30, $1
+lw $1, −4($30) 		; restore $1 from stack
+lw $2, −8($30) 		; restore $2 from stack
+jr $31 				; return from sumOneToN
+
+```
+
+In general, Stack usage rules are:
+
+```
+sw
+sw
+...
+sub $30, $30, 4.n
+[body]
+add $30, $30, 4.n
+lw
+lw
+jr $31
+```
+
+## Recursion
+
+Here is an example of recursion
+
+```Assembly
+; Save $31 on the stack
+sw $31, -4($30)
+lis $31
+.word 4
+sub $30, $30, $31
+
+; Call recSum(13)
+lis $4
+.word recSum
+lis $1
+.word 13
+jalr $4
+
+; Restore $31 from the stack
+lis $31
+.word 4
+add $30, $30, $31
+lw $31, -4($30)
+
+; Return to OS
+jr $31
+
+;-----------------------
+
+; recursively sum up the integers from 1 to N
+; assume that input (N) is in $1
+; output is returned in $3
+recSum:
+; Save registers on the stack
+sw $1, -4($30)
+sw $2, -8($30)
+sw $4, -12($30)
+sw $31, -16($30)
+lis $4
+.word 16
+sub $30, $30, $4
+; Initialize sum so far
+add $3, $0, $0
+; Check to see if we are in the base case (N=0)
+beq $1, $0, done
+; Otherwise, we must compute the sum of the current N
+; and the sum of the rest
+; keep a copy of the current value of N
+add $2, $1, $0
+; put N-1 into register $1
+lis $4
+.word 1
+sub $1, $1, $4
+; get ready to call routine (i.e., ourself)
+lis $4
+.word recSum
+jalr $4
+; add the value we got back to the current value of N (in $2)
+add $3, $3, $2
+done:
+; restore registers
+lis $4
+.word 16
+add $30, $30, $4
+lw $1, -4($30)
+lw $2, -8($30)
+lw $4, -12($30)
+lw $31, -16($30)
+jr $31
+```
+
+In general, the template for recursion in MIPS is roughly:
+
+- Save registers ($31 in particular)
+- Check base case
+- Recursive case:
+	- Compute next value
+	- Call self
+	- Compute return value
+- Restore registers
