@@ -435,3 +435,172 @@ In general, the template for recursion in MIPS is roughly:
 	- Call self
 	- Compute return value
 - Restore registers
+
+# Lectures 5 and 6
+
+## Assembler Stages
+
+First pass = make an intermediate representation
+Second pass = make actual ML code
+
+## Syntax and Semantics
+
+**Syntax** = form / structure (col 2 of MIPS ref sheet)
+Asm lang syntax goes in, ML lang syntax comes out
+
+**Semantics** = "meaning" (col 3 of MIPS ref sheet)
+What do instructions actually "do"
+
+**Location** and **Labels** (col 4 of MIPS ref sheet)
+Location = "where I am"
+Label = "where I want to be"
+
+## First Pass - Analysis
+
+Must generate
+1) an intermediate representation
+2) a symbol table
+
+Tokenization (not neccesary, but probably the best intermediate representation
+- A **Tokenizer** is a program that
+	- takes an **Input** of ASCII chars
+	- **Outputs** a sequence of Tokens
+	- e.g: `add $3, $1, $7` => `<ADD><REG><COMMA><REG><COMMA><REG>`
+
+### Intermediate Representation (IR)
+
+There is no "hard and fast" rules for what a IR can be.
+It can be anywhere from 
+- Just the raw ASCII minus comments
+- A series of tekens
+- Perliminary binary translation
+- Or really anywhere inbetween
+
+### Symbol Table (ST)
+
+Stores the address and the name of each label definition
+
+The following code has the following Symbol table
+```
+0x00 misery: beq $0, $7, happy
+...
+0x0C         beq $7, $12, misery
+...
+0x1C happy:  add $3, $3, $3
+```
+
+name | address
+-- | --
+misery | 0x00
+happy | 0x1c
+
+## Second Pass - Synthesis
+
+Takes the IR and ST, and combines them into valid machine code
+
+## Example: Encoding a beq instruction
+
+Given `0x0C beq $7, $12, misery`, and that `misery` is at `0x00`
+
+from the MIPS reference sheet, we know `beq` has format `0001 00ss ssst tttt iiii iiii iiii iiii`, where i is an **Offset** from the current PC!
+
+Thus, we must encode those `i`'s to have a value of `-16`, to move the PC back to 16
+
+## Advice for making an assembler
+
+Look for patterns!
+
+For example: ADD and SUB have instructions that are almost the same! They only differ by 1 bit!
+
+There are plenty of these, so don't forget to write DRY code
+
+## Efficieny of the Symbol Table
+
+For large programs, there will be a huge symbol table, and there must be a way to have quick and efficient access to it.
+
+Symbol Tables are just (key, val) pairs, with the key being the label string, and the value being an integer representing the address of the label
+
+So, TL;DR, use a Hash Map / Dictionary
+- Supports quick insert (Pass 1)
+- Supports quick remove (not that we will be doing any removes)
+- Supports quick finds (Pass 2 AND Pass 1 - Check for same label, 2 addr)
+
+## Error Checking in Pass 1
+
+Check for Duplicate Label Definitions (i.e: same label for 2 different addresses)
+
+Check for Label Syntax
+- Must start with an alphabetic char (so 123fred: is bad, $54: is bad)
+- Must have only alphanumeric chars
+
+Check basic Syntax
+- Eg: `asddsa fgdfg ,,;` is invalid
+
+## Error Checking in Pass 2
+
+Consider `beq $3, $4, notALabel`
+
+We can't jsut throw this instruction out in Pass 1, as notALabel might be defined later. Only in Pass 2 can we throw a "label undefined" error
+This is a *Semantic* Error
+
+Consider `lw $3 4($30)`
+
+This will throw a *Syntax* error
+
+Consider `lw $3, 4($30`
+Consider `lw lw $3, 4($30)`
+
+These will all throw *Syntax* error
+
+Consider `lv $3, 4($30)`
+
+This will thow either a "invalid instruction" error, or a "Syntax error"
+
+Consider `lw $3, 4($32)`
+
+This will throw a *Semantic* error, since register $32 doesn't exist
+
+Consider `lw $3, 44444444444444($30)`
+
+This will throw a *Semantic* error, since that number is out of the 16 bit bound, and can't be encoded in the instruction
+
+Consider `$3, 5($30)`
+
+This might throw a *Semantic* error, since 5 is not a multiple of 4 (but i might not, if the multiplication between $30 and 5 is actuall a multiple of 4)
+
+## Error Checking Philosophy
+
+### Accept valid instructions, reject everything else.
+
+Easier to check validity of instruction, than the invalidity of the instructions.
+
+## A note on what the Assembler will output
+
+The assembeler we write will **output literal bits, NOT ASCII chars!!**
+
+That means that the assembler will make heavy use of the bitwise operators, like `&, |, <<, >>`, etc...
+
+Output is still to STDOUT, but use `putchar`
+
+## A Gift
+
+On the Assignment 3/4 page, you can download `asm.c / asm.cc / asm.rkt`, that will provide a significant ammount of helpful boilerplate code to jumpstart your assembler development.
+
+## How to Write an Assembler
+
+Slowly.
+
+With a lot of tests.
+Like, a LOT of tests.
+Like a SHITTON of tests.
+Like an UNREASONABLE AMMOUT of tests.
+
+Test your assembler against cs241.binasm.
+
+## Correctness
+
+- Read the spec carefully, or, RTFM
+- Think reasonably, and unreasonably
+- Remember memory: O(n)
+- Running times DO matter: O(n)
+- *Dont't use Marmoset as your only testing tool!*
