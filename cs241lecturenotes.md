@@ -604,3 +604,75 @@ Test your assembler against cs241.binasm.
 - Remember memory: O(n)
 - Running times DO matter: O(n)
 - *Dont't use Marmoset as your only testing tool!*
+
+# Lecture 7
+
+## Loaders
+
+Generally, we don't run our programs by loading them at addr. 0. Usually, we have an OS loaded before us that then
+a) delegates RAM to programs, 
+b) copies those programs to that point in ram, 
+c) executes them.
+
+In pseudocode, the loader does the following:
+```
+loop
+ decide what program to run
+ figure out the length of the program (n)
+ find n words of storage at some address (a)
+ read program into memory at a
+ set up program (e.g: mipstwoints)
+ put a into a register (say $19)
+ jalr $19
+end loop
+```
+
+## Chickens and Eggs
+
+To get the size of the program we want to load, we actually have to store the size of our program with our program (this is because of the chicken and egg problem of having to load a program into RAM to find it's size, but we need it's size to load it into RAM)
+
+Another issue is that the loader itself is a program, so who loads the loader?
+Well, a Microloader loads the loader.
+Who loads the Microloader?
+The Firmware / BIOS
+
+It's turtles all the way down.
+
+(this is called Bootstrapping)
+
+### NOTE
+I missed the next bit of the lecture, so get ready for some pretty disjointed notes.
+
+## MERL Format
+
+Header cookie (1 word: `beq $0, $0, 2 (0x10000002)`)
+Length of the .merl file (1 word)
+Length of program + header (1 word)
+Program code (A3 + A4)
+Notes of what to change (Relocation entries: `.word 1` `.word <loc>`)
+\- i.e: which registers link to other registers that would have to have a mem-offset added to them
+
+See full description on the CS241 website
+
+## A MERL Assembler (for A5)
+
+- Pass 1 changes
+	- Start counting at 0xc to account for the 3 word MERL header
+	- If you see a `.word <label>` instruction, write down it's location in the relocation table
+- Pass 2 changes
+	- Output the header (the coockie, the size of the .merl file, the size of the program + header)
+	- Output notes:
+		- Relocation table entries
+
+## Relocating Loader Pseudocode
+
+```
+read header
+a = findFreeRAM(codeLength)
+for each instruction:
+	MEM[a + i] = instruction
+for each relocation entry
+	MEM[a + location] += a
+place a into $19
+jalr $19
+```
