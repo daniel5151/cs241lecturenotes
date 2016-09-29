@@ -19,6 +19,15 @@ ga('send', 'pageview');
 ## Fall 2016
 ### Notes by Daniel Prilik - SE 2020
 
+## DISCLAIMER
+
+These notes are **far from complete** and are **quite porous** compared to what's been covered in class.
+Copying code and diagrams off of powerpoints is hard in and of itself, but when the powerpoint slides start flying by, it becomes an impossible task.
+Use these as a super rough outline of what we may have possibly covered in class, but **do not use these as a primary set of study notes.**
+
+Yours, 
+\- Daniel Prilik
+
 # Instructor info
 - Matt Crane
 	- Email: matt.crane@uwaterloo.ca
@@ -675,4 +684,66 @@ for each relocation entry
 	MEM[a + location] += a
 place a into $19
 jalr $19
+```
+
+# Lecture 8
+
+## MERL file for example code
+
+**Code**
+```
+A: .word B
+B: .word 7
+C: .word 0xA
+D: .word C
+```
+
+**Symbol Table**
+Symbol | Address
+----|----
+A | 0x0C
+B | 0x10
+C | 0x14
+D | 0x18
+
+**Relocation Table**
+
+|Relocations |
+|---------- |
+|0x0C|
+|0x18|
+
+**The Merl File:**
+```
+; Header
+0x10000002
+0x0000002C
+0x0000001C
+
+; Program Code
+0x00000010
+0x00000007
+0x0000000A
+0x00000014
+
+; Relocation Entries
+0x00000001
+0x0000000C
+0x00000001
+0x00000018
+```
+
+## Linkers
+
+Linkers take distinct programs, and smush them together into one package.
+This is useful to create reusable components of code, and allow other code to to them.
+
+## Missed a lot about ESD and ESRs
+
+## Linker Pseudocode
+```
+concatenate the (merl) programs
+construct the ESD
+use ESR
+Relocate (internally)
 ```
