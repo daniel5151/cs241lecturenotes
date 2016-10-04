@@ -25,6 +25,8 @@ These notes are **far from complete** and are **quite porous** compared to what'
 Copying code and diagrams off of powerpoints is hard in and of itself, but when the powerpoint slides start flying by, it becomes an impossible task.
 Use these as a super rough outline of what we may have possibly covered in class, but **do not use these as a primary set of study notes.**
 
+That said, the section regarding **Formal Languages** might be more complete.
+
 Yours, 
 \- Daniel Prilik
 
@@ -738,6 +740,10 @@ D | 0x18
 Linkers take distinct programs, and smush them together into one package.
 This is useful to create reusable components of code, and allow other code to to them.
 
+https://www.student.cs.uwaterloo.ca/~cs241/slides/LinkerHandout.pdf
+
+https://www.student.cs.uwaterloo.ca/~cs241/slides/LoaderHandout.pdf
+
 ## Missed a lot about ESD and ESRs
 
 ## Linker Pseudocode
@@ -747,3 +753,110 @@ construct the ESD
 use ESR
 Relocate (internally)
 ```
+
+# Lecture 9
+
+## Static Linking vs Dynamic Linking
+
+Static Linking Example
+- Assemble and combine all code into one large, self contained, executable
+
+Dynamic linking example
+- Done at execution time
+- Essentially, you call a "system subroutine" with the argument being a string of the subroutine you actually want to find, and the system will then redirect you to the code you want.
+- Results in smaller file-sizes
+- Multiple programs reuse the same subroutines
+
+
+That's all for MIPS btw
+
+***
+
+# An Introduction to Formal Languages
+
+## Motivation
+
+- Precision of specification and recognition
+- Importance of this: every assignment past A5 will use these concepts
+- Benefits of theory:
+	- Means ofcommunication
+	- Determine the power and limits of communication (what we can / can't express)
+	- Guides the design and structure of a compiler
+
+## Terminology
+
+- Rooted in set theory `{}`
+- Alphabet: a finite set of symbols
+  $$$ \Sigma_1 = \{a, b, c\} $$$
+  $$$ \Sigma_2 = \{\Delta, cat, blue, 123\} $$$
+- Word (aka strin, sentance): a finite sequence of symbols from the alphabet
+	- Words over $$$\Sigma_1: W_1=baab\ \ W_2 = aaa\ \ W_3=\epsilon(or \lambda)$$$
+	- Note that no symbols is totally okay.
+
+- Language: a set of words
+	- Languages over $$$\Sigma_1:$$$
+		- $$$ L_1 = \{a,aa,aab,baa\}$$$
+		- $$$ L_2 = \{a,aa,aaa,aaaa,...\}$$$
+		- $$$ L_3 = \{\}$$$
+		- $$$ L_4 = \{\epsilon\}$$$
+- $$$|W|$$$: the size of $$$W$$$ (Where $$$W$$$ is a word or language)
+	- $$$ |L_1| $$$ = 4
+	- $$$ |L_2| $$$ = infinite
+	- $$$ |L_3| $$$ = 0
+	- $$$ |L_4| $$$ = 1
+	- $$$ |W_1|\ (baab) $$$ = 4
+
+## Use of Formal Languages Specification
+
+A statement of what a language is should be
+- precise (no ambiguity)
+- easy to express
+- Automatable
+
+We can use these specifications to Determine if a word is in a language
+- Formally: given language $$$L$$$ and a word $$$w$$$, recognition answers the question: "$$$is\ w \in L$$$"
+    - Techincally, this is just a Yes or No question, but in practice, we would like some info about what went wrong
+    - Eg: if NO: line # and type of error, if YES: certificate of correctness
+
+
+## WLP4
+
+Let's formally specify WLP4 "WooL P Four" = "Waterloo, Language, Plus, Pointers, Plus, Procedures"
+
+- Alphabet: WLP4 tokens
+- Word: A WLP4 program
+- Language: Set of calid WLP4 programs
+
+There is a full language specification the main course web-page: https://www.student.cs.uwaterloo.ca/~cs241/wlp4/WLP4.html
+
+## Language Classes
+Language classes are sets of languages that may share common characteristics
+
+- Chomsky Hierarchy for Languages (n+1 encompases n):
+	- Finite Languages (fixed number of words)
+	- Regular Languages (a, aa, aaa, aaa...)
+	- Context-free Languages (explained later)
+	- Context-sensitive Languages (explained later)
+
+As we move down the chompsky hierarchy, we move up in power of expressiveness, but also complexity
+
+## Use of Formal Languages - Organization of Compilation
+
+- **Lexical analysis** - Regular Languages
+- **Syntaxtic analysis** - Context Free Langauges
+- **Context-sensitive analysis (semantic analysis)** - Context Sensitive Languages
+- **Synthesis (code generation)** - Context Sensitive Languages
+
+## Which Language Level is it?
+
+- Let $$$\Sigma = \{ASCII\ characters\} - \{CR\}$$$
+- $$$L_1 = \{$0, $1, $2, ... $31\}$$$ &nbsp;
+ 	- **Finite Language**
+- $$$L_2 = $$$ valid labels in MIPS 
+	- **Regular Language**
+- $$$L_3 = \{0,4,-4,8,-8,...\} = $$$ valid load word (`lw`) offsets
+	- **Finite Language** (offsets have bounds)
+- $$$L_4 = $$$ valid line of assembly language for A3P2 (`.word <int>` or `.word <hexint>`)
+	- **Finite Language** (ints/hexints have bounds)
+- $$$L_5 = $$$ valid line of assembly language for A3P3 (+`.word <label>`)
+	- **Context Sensitive** (validity depends on if label is defined)
