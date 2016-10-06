@@ -30,6 +30,8 @@ That said, the section regarding **Formal Languages** might be more complete.
 Yours, 
 \- Daniel Prilik
 
+[TOC]
+
 # Instructor info
 - Matt Crane
 	- Email: matt.crane@uwaterloo.ca
@@ -215,7 +217,7 @@ CPUs are not actually just magic boxes. They have things within them that make t
 There are several places to Store things
 - **Program Counter (PC)**- Where in memory to load new instructions from
 - **Instruction Register (IR)**- Chunk of memory that holds the instruction to run
-- **Registers 0-31 ($0 -> $31)** - "boxes" that can store words of information (think superfast ram)
+- **Registers 0-31 (\$0 -> $31)** - "boxes" that can store words of information (think superfast ram)
 
 And there are other places that Do things
 - **Control Unit** - reads the PC, retrieves the instruction from memory, puts that instruction in the IR, and then executes the instruction
@@ -255,8 +257,8 @@ A full list of MIPS instructions can be found here: https://www.student.cs.uwate
 
 The instruction `lw` loads a word from memory, and `sw` stores a word to memory
 
-Eg: `lw $7, 0($3)` will load the value at MEM[$3] into register $7
-Eg: `sw $8, 4($3)` will load the value from $8 to MEM[$3+4] (that +4 is needed since we store Words in memory, and Words are 4 bytes each)
+Eg: `lw $7, 0($3)` will load the value at MEM[\$3] into register \$7
+Eg: `sw $8, 4($3)` will load the value from \$8 to MEM[\$3+4] (that +4 is needed since we store Words in memory, and Words are 4 bytes each)
 
 ## Main Machine Cycle
 
@@ -447,7 +449,7 @@ In general, the template for recursion in MIPS is roughly:
 	- Compute return value
 - Restore registers
 
-# Lectures 5 and 6
+# Lectures 5
 
 ## Assembler Stages
 
@@ -616,7 +618,7 @@ Test your assembler against cs241.binasm.
 - Running times DO matter: O(n)
 - *Dont't use Marmoset as your only testing tool!*
 
-# Lecture 7
+# Lecture 6
 
 ## Loaders
 
@@ -688,7 +690,7 @@ place a into $19
 jalr $19
 ```
 
-# Lecture 8
+# Lecture 7
 
 ## MERL file for example code
 
@@ -754,7 +756,7 @@ use ESR
 Relocate (internally)
 ```
 
-# Lecture 9
+# Lecture 8
 
 ## Static Linking vs Dynamic Linking
 
@@ -787,24 +789,24 @@ That's all for MIPS btw
 
 - Rooted in set theory `{}`
 - Alphabet: a finite set of symbols
-  $$$ \Sigma_1 = \{a, b, c\} $$$
-  $$$ \Sigma_2 = \{\Delta, cat, blue, 123\} $$$
+  $ \Sigma_1 = \{a, b, c\} $
+  $ \Sigma_2 = \{\Delta, cat, blue, 123\} $
 - Word (aka strin, sentance): a finite sequence of symbols from the alphabet
-	- Words over $$$\Sigma_1: W_1=baab\ \ W_2 = aaa\ \ W_3=\epsilon(or \lambda)$$$
+	- Words over $\Sigma_1: W_1=baab\ \ W_2 = aaa\ \ W_3=\epsilon(or \lambda)$
 	- Note that no symbols is totally okay.
 
 - Language: a set of words
-	- Languages over $$$\Sigma_1:$$$
-		- $$$ L_1 = \{a,aa,aab,baa\}$$$
-		- $$$ L_2 = \{a,aa,aaa,aaaa,...\}$$$
-		- $$$ L_3 = \{\}$$$
-		- $$$ L_4 = \{\epsilon\}$$$
-- $$$|W|$$$: the size of $$$W$$$ (Where $$$W$$$ is a word or language)
-	- $$$ |L_1| $$$ = 4
-	- $$$ |L_2| $$$ = infinite
-	- $$$ |L_3| $$$ = 0
-	- $$$ |L_4| $$$ = 1
-	- $$$ |W_1|\ (baab) $$$ = 4
+	- Languages over $\Sigma_1:$
+		- $ L_1 = \{a,aa,aab,baa\}$
+		- $ L_2 = \{a,aa,aaa,aaaa,...\}$
+		- $ L_3 = \{\}$
+		- $ L_4 = \{\epsilon\}$
+- $|W|$: the size of $W$ (Where $W$ is a word or language)
+	- $ |L_1| $ = 4
+	- $ |L_2| $ = infinite
+	- $ |L_3| $ = 0
+	- $ |L_4| $ = 1
+	- $ |W_1|\ (baab) $ = 4
 
 ## Use of Formal Languages Specification
 
@@ -814,7 +816,7 @@ A statement of what a language is should be
 - Automatable
 
 We can use these specifications to Determine if a word is in a language
-- Formally: given language $$$L$$$ and a word $$$w$$$, recognition answers the question: "$$$is\ w \in L$$$"
+- Formally: given language $L$ and a word $w$, recognition answers the question: "$is\ w \in L$"
     - Techincally, this is just a Yes or No question, but in practice, we would like some info about what went wrong
     - Eg: if NO: line # and type of error, if YES: certificate of correctness
 
@@ -849,14 +851,86 @@ As we move down the chompsky hierarchy, we move up in power of expressiveness, b
 
 ## Which Language Level is it?
 
-- Let $$$\Sigma = \{ASCII\ characters\} - \{CR\}$$$
-- $$$L_1 = \{$0, $1, $2, ... $31\}$$$ &nbsp;
+- Let $\Sigma = \{ASCII\ characters\} - \{CR\}$
+- $L_1 = \{$0, $1, $2, ... $31\}$ &nbsp;
  	- **Finite Language**
-- $$$L_2 = $$$ valid labels in MIPS 
+- $L_2 = $ valid labels in MIPS 
 	- **Regular Language**
-- $$$L_3 = \{0,4,-4,8,-8,...\} = $$$ valid load word (`lw`) offsets
+- $L_3 = \{0,4,-4,8,-8,...\} = $ valid load word (`lw`) offsets
 	- **Finite Language** (offsets have bounds)
-- $$$L_4 = $$$ valid line of assembly language for A3P2 (`.word <int>` or `.word <hexint>`)
+- $L_4 = $ valid line of assembly language for A3P2 (`.word <int>` or `.word <hexint>`)
 	- **Finite Language** (ints/hexints have bounds)
-- $$$L_5 = $$$ valid line of assembly language for A3P3 (+`.word <label>`)
+- $L_5 = $ valid line of assembly language for A3P3 (+`.word <label>`)
 	- **Context Sensitive** (validity depends on if label is defined)
+
+# Lecture 9
+
+## Specifying Regular Languages
+
+There are several basic building blocks that we use to specify Regular Languages:
+
+### Finite languages
+You can always build off an existing finite language
+
+### Union
+Formally Defined: $T_1 \cup T_2 = \{x\ |\ x \in T_1\ or\ x \in T_2\}$
+Simply: Make a new set containing all the elements of both sets (with each element appearing only once)
+
+### Concatenation
+Formally Defined: $T_1 \cdot T_2 = \{xy\ |\ x \in T_1 and\ y \in T_2\}$
+Example: 
+$T_1 $= {dog, cat}
+$T_2 $= {$\epsilon$, fish}
+$T_1 \cdot T_2$ = {dogfish, catfish, dog, cat}
+
+$T_1$ = {dog, cat}
+$T_2$ = {}
+$T_1 \cdot T_2$ = {}
+
+### Repetition
+Formally Defined Recursively (Kleene closure): 
+$T* = \{\epsilon\} \cup \{xy\ |\ x \in T*\ and\ y \in T\}$
+Alternate Definition (Iterative):
+$T^0 = \{\epsilon\},\ T^1 = T,\ T^2 = T \cdot T^1 = \{xy\ |\ x \in T and\ y \in T^1\}$
+(In general): $T^k = T \cdot T^{k-1}$
+
+Examples: 
+$T = T^1 = $ {dog, cat}
+$T*$ = {$\epsilon$, dog, cat, catdog, dogcat, dogdog, catcat, dogdogcat, ...}
+
+## DFAs (Deterministic Finite Automata)
+Regular Languages can be recognized by _Finite Automota_
+We begin with _deterministic finite state automata (DFAs)_
+
+DFAs must have the following:
+
+- States (at least one)
+    - Start State (ONLY 1)
+    - Final State(s) (MUST HAVE MIN 1)
+    	- after reading all input, if I am in a final state => accept
+- Transitions (optional - eg: no transitions with 1 state)
+	- if in `state A` AND read input $x \in \Sigma$ => move to `state B`
+
+_A DFA for some MIPS instruction_
+![dfa1.png](./dfa1.png)
+_A DFA for a label (i.e: starts with letter, then any numberletter or number)_
+![dfa2.png](./dfa2.png)
+**Images courtesy of Stephen Melinyshyn**
+
+### Observations about DFAs
+- Ability to trace
+	- can draw a picture (only ever in one state)
+- Transitions out of states are unique and deterministic
+- Errors -> implicit error state (if input is not specified in a transition of a state, then that is an error)
+
+## Formal Definition of DFAs
+
+- A DFA is a 5-tuple $(\Sigma, Q, q_0, A, \delta)$
+	- Finite Alphabet $\Sigma$
+	- Finite set of States $Q$
+	- Start State $q_0 \in Q$
+	- Set of final/accepting states $A \subseteq Q$
+	- Transition function $\delta : Q\ x\ \Sigma \to Q$
+
+# Lecture 10
+
