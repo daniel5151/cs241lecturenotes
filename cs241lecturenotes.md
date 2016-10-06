@@ -932,5 +932,41 @@ _A DFA for a label (i.e: starts with letter, then any numberletter or number)_
 	- Set of final/accepting states $A \subseteq Q$
 	- Transition function $\delta : Q\ x\ \Sigma \to Q$
 
+## DFA Interpreter Algorithm
+
+Input: A word $w = w_1w_2...w_n$ where each $w_i \in \Sigma$
+Output: `true` if accepter, `false` if rejected
+
+```
+state = q0
+for i in 1..n:
+	state = delta(state, wi)
+return (state in A)
+```
+
+## Implementing DFAs
+We need to implement the transition function somehow... but how?
+
+Option 1: `if` statements?
+```
+if state == state1:
+	if input == a: ...
+    else if input == b: ...
+    ...
+else if state == state2:
+	if input == a: ...
+    ...
+...
+```
+**NO. THIS IS A TERRIBLE IDEA.**
+
+Option 2: Dictionary, key = (state, input), value = state
+
+## Where are DFAs used?
+
+- Every computer ever
+	- a CPU is essentially just a DFA
+
 # Lecture 10
+
 
