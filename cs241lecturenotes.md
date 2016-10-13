@@ -958,9 +958,10 @@ else if state == state2:
     ...
 ...
 ```
+
 **NO. THIS IS A TERRIBLE IDEA.**
 
-Option 2: Dictionary, key = (state, input), value = state
+Option 2: **Dictionary**: key = (state, input), value = state
 
 ## Where are DFAs used?
 
@@ -969,4 +970,124 @@ Option 2: Dictionary, key = (state, input), value = state
 
 # Lecture 10
 
+## Non-deterministic Finite Automa (NFAs)
+
+L = {bba, baa, bbaa, bbbaa, bbbbbaa, ...} (wich is either 2 b's followed by an a, or 1 or mote b's bollowed by 2 a's)
+
+If we try to derive this using a DFA, it is pretty unweildy, and grows pretty large. Moreover, it is hard to see what the DFA recognises at a glance... TL;DR: It works, but it's ugly.
+
+On the other hand, if we do this with an NFA, it becomes a lot clearer.
+
+![nfa.png](./nfa.png)
+
+NFAs can be in **2 different states at the same time!**
+NFAs allow *multiple transitions out of one state on the same input*
+
+## NFA Definition
+
+It's the same as DFA with the following change: $T:Q\ x\ \Sigma \rightarrow 2^Q$
+In english: We can be in a Set of States, and this T is a *relation* instead of a function
+
+2^q^ is the **Powerset** of Q
+
+if Q = {a,b,c} then 2^q^ = { {},{a},{b},{c},{ab},{ac},{bc},{abc} }
+
+Note: |2^Q^| = 2^|Q|^
+
+## NFA interpreter
+
+Input: a Word $w = w_1w_2...w_n$
+Output: $True$ if accepted, $False$ if rejected
+
+Pseudocode:
+```
+states = {q_0}
+for i in 1..n:
+	states' = {s' | s' in T(s,w_i) for all s in states}
+	states = states'
+return (states) instersected with (Accepted States) =/= {}
+```
+
+Essentially, we have to track an array of possible states we are in. That's all.
+
+## Implementing an NFA interpreter
+
+With C++, we are lucky enough that STL provides us with methods like:
+\- Intersection
+\- Union
+\- Membership
+\- Iteration
+
+BUT these are NOT constant time operations.
+
+Luckilly, we can improve preformance by using a **Bit Vector**
+i.e: Say we have 8 states, and we have a byte like `10101100`, that means we are currently in sates 3,4,6,8
+
+Using bit vectors lets us use bytewise operations to do intersection, union, etc... but we have to deal with bitshifting :D
+
+## Differences b/w NFAs and DFAs
+
+NFAs can be smaller than DFAs for the same language
+NFAs can be in multiple states at the same time
+DFAs are easier to implement due to one variable (the current variable)
+
+NOTE: **The two are equivalent in the languages they recognize.**
+i.e: you can always write a DFA from an NFA **and you will have to on the midterm**
+Also, all DFAs are valid NFAs.
+
+## Killer app for Finite Automa
+
+Scanner = tokenization, and indeed, if you look at the source code given for the asm assignment, you can see an implementation of a tokenizer thant uses DFAs.
+
+## $\epsilon$-NFAs
+
+Allow transitions between states on "no input"
+Can be used as "glue" for joining machines together
+
+Example: L = {card, cab, calf}
+
+![epsNFA.png](./epsNFA.png)
+
+## Converting $\epsilon$-NFAs to NFAs
+
+Converting a $\epsilon$-NFA to a NFA is always possible.
+There are a few ways to do this:
+1) take shortcuts: $\epsilon X = X\ for\ X \in \Sigma$
+2) Pull back accepting states
+3) Remove $\epsilon$-transitions
+4) Remove dead states (states that we can never get to)
+
+# Regular Expressions
+
+## Definition
+
+Defined recursively: a Regular Expression (RE) is:
+- $\emptyset$, or
+- $\epsilon$, or
+- $a $ where $a \in \Sigma$, or
+- E~1~E~2~ where both are REs, or (concatenation)
+- E~1~|E~2~ where both are REs, or (Alternation / Union)
+- E* where E is a RE (Repetition)
+
+## RE examples
+
+L = {cab,car,card}, $\Sigma$= {a,b,c,...z}
+We can make a Regex for this langauge in different ways:
+-- cab|car|card **or**
+-- ca(b|r(d|$\epsilon$))
+
+L = {w | w contains an even number of a's}, $\Sigma$= {a}
+-- (aa)*
+
+L = {w | w contains an even number of a's}, $\Sigma$= {a,b}
+-- b\*(ab\*ab\*)\*
+
+## Unix Shorthands and Extensions
+
+Most Regex "engines" accept the following shorthands as valid syntax:
+\- `[a-z]` translates to a|b|c|...|z (the english alphabet)
+\- `E+` trnaslates to `EE*` (1 or more)
+There are plenty more!
+
+# Lecture 11
 
