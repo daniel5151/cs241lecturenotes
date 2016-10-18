@@ -1069,6 +1069,11 @@ Defined recursively: a Regular Expression (RE) is:
 - E~1~|E~2~ where both are REs, or (Alternation / Union)
 - E* where E is a RE (Repetition)
 
+And there is an Order of Precendence for the last 3:
+1) Repetition
+2) Concatenation
+3) Alternation
+
 ## RE examples
 
 L = {cab,car,card}, $\Sigma$= {a,b,c,...z}
@@ -1086,8 +1091,194 @@ L = {w | w contains an even number of a's}, $\Sigma$= {a,b}
 
 Most Regex "engines" accept the following shorthands as valid syntax:
 \- `[a-z]` translates to a|b|c|...|z (the english alphabet)
-\- `E+` trnaslates to `EE*` (1 or more)
+\- `E+` translates to `EE*` (1 or more)
+\- `E?` translates to `(E|epsilon)` (zero or one)
 There are plenty more!
 
 # Lecture 11
 
+## RE to $\epsilon$-NFA
+
+We convert REs to $\epsilon$-NFAs piece by piece.
+
+To **concatenate** E~1~ and E~2~ (making  E~1~E~2~):
+1) Add epsilon transitions b/w the end states of E~1~ and the start state of E~2~
+2) Make the end states of E~1~ into regular states (we don't want to accepts just E~1~ valid things anymore)
+
+![REtoNFA_concatenation.png](./REtoNFA_concatenation.png)
+
+To make an **alternation** between E~1~ and E~2~ (making  E~1~|E~2~):
+1) Add a external start state that has an epsilon transition to both start-states of E~1~ and E~2~
+
+![REtoNFA_or.png](./REtoNFA_or.png)
+
+To make a **repetition** from E~1~ (making E~1~*):
+1) Add epsilon transitions b/w the end states back to the start state.
+2) Make the start state an acceptance condition (to allow for no input)
+
+![REtoNFA_repetition.png](./REtoNFA_repetition.png)
+
+We can take these $\epsilon$-NFAs and convert them to regular old NFAs using the same methods as before.
+
+## Regular Languages
+
+A Regular Language is a language which is either:
+\- specified by a Regular Expression
+\- recognized by an $\epsilon$-NFA
+\- recognized by an NFA
+\- recognized by a DFA
+*Note: all of the above can be converted to any other one*
+
+## Practical Application of DFAs
+
+Most real-world examples do not care about recognizers (DNA match may be an exception)
+
+Mostly, DFAs are used for:
+\- transforming / transducing input
+\- searching in text (the most common use of Regex)
+\- scanning / translating
+
+## Transducers
+
+A transducer is a DFA with output, that is, transitionslook like **input/output** vs just **input**
+
+*Example 1:*
+Removing stutters from $\Sigma$ = {a,b}
+So, `aaabbaa -> aba`, or `baabbbb -> bab`
+
+![transucer.png](./transucer.png)
+
+Recall that there can be 2 types of Transducers: Moore Machines and Mealy Machines.
+Moore machines output on leaving a state, Mealy machines output on transition
+
+*Notice how this is very similar to ECE-124...*
+
+## The Scanning Problem
+
+Sometimes, it is easy to translate an input into an output:
+**Input**: `add $1, $2, $3`
+**Output**: `<ADD><REGISTER><COMMA><REGISTER><COMMA><REGISTER>`
+
+But what if we get something like this?
+**Input**: `0x1234abcd`
+The output can be (theoretically be) both:
+**Out1**: `<HEXINT>`
+**Out2**: `<INT><ID><INT><ID>`
+
+How to we ensure we only get option 1?
+
+Well, we use the following algorithm.
+
+## Simplified Maximal Munch
+
+Input is a word c~1~c~2~...c~k~
+`i` is the index of the current character
+
+```
+i = 0
+state = START
+loop
+	newstate = ERROR
+    if i < k:
+    	newstate = transition(state, c[i])
+        if newstate == ERROR:
+        	if state is not a final state:
+            	report error and exit
+            if state is not WHITESPACE:
+            	output appropriate token
+            state = START
+            if i <= k:
+            	exit
+    else:
+    	state = newstate
+        i = i + 1
+```
+
+TL;DR: consume as much of the string in the current state as possible.
+
+# Context Free Languages
+
+## Big picture of Compilation
+
+There are 4 steps to compiling code:
+
+1) Lexical Analysis
+2) Syntactic Analysis
+3) Context-sensitive (semantic) analysis
+4) Synthesis (code generation)
+
+Other points:
+\- Staging can improve error messages, (staging means using the "right tool for the job")
+\- Doing extra work at an early stage is possible, but may be over complicating.
+\- Basically, have seperate programs in a pipeline:
+Input -> SCAN makes tokens -> PARSE makes parse tree -> CODEGEN makes MIPS code
+
+## Non-Regular Languages
+
+What if we wanted to make a DFA over $\Sigma$ = {a,b} for L = {w | number of a's in w == number of b's in w}
+*It's impossible! It's infinite! No Deterministic **Finite** Automota can be **Infinite**!*
+
+## Context-Free Langauges
+
+In this case, L is not a regular language, it is **context-free!**
+
+These langauges are important to compilers for doing things like *matching brackets*, where we need to know that there is the same ammount of 2 different chars.
+
+Context-Free Languages are built from:
+- Finite sets
+- Concatenation
+- Union
+- Recursion
+
+Recognizers for regular langauges use a strictly finite ammount of memory
+All it has to do is Remember the current state, and have a list of all the states with transitions.
+
+Recognizers for context-free langauages use a finite ammount of memory AND one (unbounded) stack
+(DFA + Stack <=> Parser)
+
+## Context-Free Grammars
+
+Grammars are a way to specify Context-Free langauges.
+
+So, for example, here is a CFG: (S is start state)
+```
+1. S -> aSb
+2. S -> D
+3. D -> cD
+4. D -> epsilon
+```
+
+These are called **production rules**, and together they make a specidif grammar **G**.
+
+One such word that arises from these rules is `accb`
+
+`S` =1=> `aSb` =2=> `aDb` =3=> `acDb` =3=> `accDb` =4=> `accb`
+
+## Terminology
+
+G = A context-free grammar (CFG)
+L(G) = Set of words specified by G (i.e: the langauge specified by G)
+
+a word = Sequence of tokesn that can be derived by G
+a derivation = Sequence of rewriting steps from G (informally)
+alternation = `S -> aSb` or `S -> D`
+concatenation: `aSb`
+recursion vs repetition: `S -> aSb`
+
+## Formal Definition
+
+A context-free grammar (CFG) consists of:
+
+- N - A finite set of non-terminals ("not ending")
+- T - A finite set of terminals ("ending")
+- P - A finite set of production rules (rewriting rules) of the form A -> B where $A \in N$, $B \in (N \cup T)$*
+- S - A start symbol, $S \in N$ (by definition, it is always at the lefthand side of the first rule)
+
+So, from the example:
+
+- N = {S, D}
+- T = {a, b, c, $\epsilon$}
+- P = {the 4 rules}
+- S = S
+
+# Lecture 12
