@@ -1196,6 +1196,10 @@ loop
 
 TL;DR: consume as much of the string in the current state as possible.
 
+### MIDTERM MATERIAL ENDS HERE
+
+-----------------------------
+
 # Context Free Languages
 
 ## Big picture of Compilation
@@ -1228,7 +1232,7 @@ Context-Free Languages are built from:
 - Finite sets
 - Concatenation
 - Union
-- Recursion
+- Recursion (strictly more powerful than repetition)
 
 Recognizers for regular langauges use a strictly finite ammount of memory
 All it has to do is Remember the current state, and have a list of all the states with transitions.
@@ -1248,7 +1252,7 @@ So, for example, here is a CFG: (S is start state)
 4. D -> epsilon
 ```
 
-These are called **production rules**, and together they make a specidif grammar **G**.
+These are called **production rules**, and together they make a specific grammar **G**.
 
 One such word that arises from these rules is `accb`
 
@@ -1262,8 +1266,8 @@ L(G) = Set of words specified by G (i.e: the langauge specified by G)
 a word = Sequence of tokesn that can be derived by G
 a derivation = Sequence of rewriting steps from G (informally)
 alternation = `S -> aSb` or `S -> D`
-concatenation: `aSb`
-recursion vs repetition: `S -> aSb`
+concatenation = `aSb`
+recursion vs repetition = `S -> aSb`
 
 ## Formal Definition
 
@@ -1271,14 +1275,223 @@ A context-free grammar (CFG) consists of:
 
 - N - A finite set of non-terminals ("not ending")
 - T - A finite set of terminals ("ending")
-- P - A finite set of production rules (rewriting rules) of the form A -> B where $A \in N$, $B \in (N \cup T)$*
+- P - A finite set of production rules (rewriting rules) of the form $A \rightarrow \beta $ where $A \in N$, $\beta \in (N \cup T)$*
 - S - A start symbol, $S \in N$ (by definition, it is always at the lefthand side of the first rule)
 
 So, from the example:
 
 - N = {S, D}
-- T = {a, b, c, $\epsilon$}
+- T = {a, b, c} (not $\epsilon$ though)
 - P = {the 4 rules}
-- S = S
+- S = S (can be called anything though)
 
 # Lecture 12
+
+## Example - Balanced Parentheses
+
+Example Words: $\epsilon$, `()`, `(())`, `()()`, ...
+
+CFG:
+```
+1. B -> (B)
+2. B -> BB
+3. B -> epsilon
+```
+
+Sample Derivation of `(()())`:
+
+`B`
+=1=> `(B)`
+=2=> `(BB)`
+=1=> `((B)B)`
+=3=> `(()B)`
+=1=> `(()(B))`
+=3=> `(()())`
+
+## Example - Binary Expressions G~1~
+
+Words are composed of binary numbers (no leading zeros, other than 0) with + or - signs in infix notation
+
+Example words: `1001`, `10+1`, `11-11110+0`, ...
+
+CFG:
+```
+let E = expression
+let B = binary number
+let D = non-zero binary number
+
+1. E -> E + E
+2. E -> E - E
+3. E -> B
+4. B -> 0
+5. B -> D
+6. D -> 1
+7. D -> D0
+8. D -> D1
+```
+
+Sample Derivation of `10 + 1`
+
+`E`
+=1=> `E + E`
+=3=> `B + E`
+=5=> `D + E`
+=7=> `D0 + E`
+=6=> `10 + E`
+=3=> `10 + B`
+=5=> `10 + D`
+=6=> `10 + 1`
+
+This is called a Leftmost Derivation, since we always operate on the leftmost symbol. Rightmost is the opposite.
+
+## Formal Definitions
+
+We say that $\alpha A \beta$ _directly derives_ $\ \alpha \gamma \beta$ if there exists a production rule $A \rightarrow y$. This is also called a _Derivation Step_
+
+We say that  $\alpha A \beta$ _derives_ $\ \alpha \gamma \beta$ if there are some possible derivation steps that can be preformed to get one from the other.
+Formally:  $\alpha A \beta =>$* $ \alpha \gamma \beta$
+
+When there are two or more non-terminals which can be rewritten in a derivation, we pick the **left-most/right-most** non-terminal for rewriting
+Note: there are derivations which are neither left-most or right-most
+
+- G derives $w \in T$\* if $S =>$*$w$ (eg: 10+1 is derived by G~1~)
+- L(G) = {w | $S =>$\*$w$ and $w \in T$* }
+- L is context-free if there exists a CFG _G_ such that L(G) = L
+
+## Derivations as Proofs
+
+In a regular language, to prove a DFA M accepts a word W, we could give the sequence of states visited (but this is not often done as a proof)
+
+In a context-free langauge, to prove w is in a CFG G, we list our derivation steps as our "proof"
+
+## Parse Trees
+
+Example: `10+1`
+```
+   E
+/  |  \
+E  +  E
+|     |
+B     B
+|     | 
+D     D
+| \   |
+D  0  1
+|
+1
+```
+
+Leaves are the terminals of our CFG
+The root is the start S
+
+This tree encapsulates all possible derivations of `10+1` in this grammar
+
+## Meaning of the Parse Tree
+
+"Recursive Descent Parsing" / "Syntax Directed Translation" is when you compute the value of children to compute the value of their parent
+
+`10+1` _means_ 3 (= 2 1)
+```
+D   -> 1          means D.val = 1
+D_1 -> D_20       means D_1.val = D_2.val * 2
+E_1 -> E_2 + E_3  means E_1.val = E_2.val + E_3.val
+```
+
+## Problem: Grammars can encounter Ambiguity
+
+A real-world example of ambiguity would be "Sally was given a book by Joyce". Does this mean that Joyce gave Sally a book, or Joyce wrote the book Sally was given?
+
+Formally:
+A String x is ambiguous if $x \in $ L(G) AND there is more than one parse tree for x
+A CFG G is ambiguous if some word $x \in $ L(G) is ambiguous
+
+Consider the binary expression grammar, and the string `1-10+11`
+
+There are two possible trees depending on if you apply rule 1 or rule 2 first!
+
+Some terminology for Ambiguity:
+A Grammar is ambiguous if there is a word x such that x has:
+\- $\geq$ 2 different parse trees
+\- $\geq$ 2 different left-most derivations
+\- $\geq$ 2 different right-most derivations
+
+## Fixing ambiguity in G~2~
+
+Let's rewrite our binary expression grammar differently:
+
+Instead of rules 1 and 2 being
+```
+1. E -> E + E
+2. E -> E - E
+```
+
+We can rewrite them as:
+```
+1. E -> B + E
+2. E -> B - E
+```
+
+When there is both Left and Right recursion in one rule, ambiguity is introduced.
+
+## Associativity
+
+The string `1-10+11` means `1-2+3 == (1-2)+3 = 2`
+
+In our current grammar, if we try to use Recursive Descent Parsing to calculate the value of our expression from our parse tree, we actually end up with the incorrect answer `-4`, since our parse tree would result in the incorrect associativity of `1-(2+3)`
+
+### Fix
+
+To fix this, we need to once again change our first 2 rules...
+
+The rules
+```
+1. E -> B + E
+2. E -> B - E
+```
+result in **right associativity** since they are **right-recursive**
+
+To fix these rules, we have to make rules 2 left associative
+
+```
+1. E -> E + B
+2. E -> E - B
+```
+
+## Precedence Problems
+
+What if we wanted to add multiplication to our grammar?
+Maybe it's as easy as adding the rule `E -> E * B`?
+
+Well, consider `1*10+11`... that works out nicely.
+Things fail when we then try `1+10*11`, since we will eval the + before the *!
+
+### Fix
+
+Nearer to the root -> later evaluation -> lower precedence
+
+Let's add some rules:
+```
+let S = Sum (new start state)
+let P = Product
+1. S -> S + P
+2. S -> S - P
+3. S -> P
+4. P -> P * B
+5. P -> P / B
+6. P -> B
+
+7. B -> 0
+8. ...
+```
+
+With these rules, our first expansion nearer to the top of the tree would be addition, and only later on would we expand products (thereby evaling them first)
+
+## Regular Languages are Context-Free Langauges
+Why?
+Because.
+I didn't copy the example because my laptop battery died.
+Just trust me, they are.
+
+
+
+# Lecture 13
