@@ -1492,6 +1492,210 @@ Because.
 I didn't copy the example because my laptop battery died.
 Just trust me, they are.
 
-
-
 # Lecture 13
+
+# Top Down Parsing
+
+## Parsing
+
+Given a grammar G and a word w,how can we find a derivation for w?
+
+There are 2 strategies:
+1) Top Down: Find a non-terminal and replace it with the right-hand side of a rule (what we have been doing, eg: S => S + P => B + P)
+2) Bottom Up: Replace a right-hand side with a non-terminal (eg: B + B * B => B + P)
+
+In both strategies, we have to make the correct decision at each step.
+
+## Parsing Algorithm - Backtracking
+
+- Try each rule in turn
+- If we can move "forward," do so
+- if we cannot move "forward," go back a step and try the next rule
+- Stop when we find the derivation
+
+This works, but is not practical. It is exponential time wrt the number of rules...
+
+There are 2 different, better O(n) algos
+
+## Parsing Algorithm - Stack Based Parsing
+
+For top-down parsing, we use a stack to remember information about our derivations and/or processed input
+
+Recall that a Context-free language can be recognized with a finite control (DFA) and one stack
+
+EG: balanced parens:
+\- ( = push
+\- ) = pop
+
+If the stack is non-empty at the end, then there is a faliure.
+
+## Augmenting Grammars
+
+Empty words and stacks can cause hassles
+
+We augment our Grammars by adding "beginning" and "ending" characters
+
+```
+1. S' -> <START>S<END>
+2. S -> AyB
+3. A -> ab
+4. A -> cd
+5. B -> z
+6. B -> wz
+```
+
+## Top-Down parsing with a Stack
+
+Invariant: Derivation = input already read + stack (read from top to bottom)
+
+Example of `<START>abywz<END>`
+
+Derivation | input read | input to read | stack | actions
+-- | -- | -- | -- | --
+`S'`| $\epsilon$ | `<START>abywz<END>` | `S'` | Rule 1
+`<START>S<END>` | $\epsilon$| `<START>abywz<END>` | `<START>S<END>` | match `<START>`
+`<START>S<END>` | `<START>` | `abywz<END>` | `S<END>` | Rule 2
+`<START>AyB<END>` | `<START>` | `abywz<END>` | `AyB<END>` | Rule 3
+`<START>abyB<END>` | `<START>` | `abywz<END>` | `abyB<END>` | match a
+`<START>abyB<END>` | `<START>a` | `bywz<END>` | `byB<END>` | match b
+`<START>abyB<END>` | `<START>ab` | `ywz<END>` | `yB<END>` | match y
+`<START>abyB<END>` | `<START>aby` | `wz<END>` | `B<END>` | Rule 6
+`<START>abywz<END>` | `<START>aby` | `wz<END>` | `wz<END>` | match w
+`<START>abywz<END>` | `<START>abyw` | `z<END>` | `z<END>` | match z
+`<START>abywz<END>` | `<START>abywz` | `<END>` | `<END>` | match `<END>`
+`<START>abywz<END>` | `<START>abywz<END>` | $\epsilon$ | $\epsilon$ | ACCEPT!
+
+Observations:
+
+How do we apply these rules? What does expand mean?
+> Use a rule: pop stack (LHS) or Push RHS (in reverse)
+
+How do we know when we are done?
+> Accept when the stack is empty and the input is empty, reject otherwise
+
+how do we know which rules to use?
+> Crystal ball?
+
+## LL(1) Parsing
+
+We need: Predict(A,x) = A -> a so long that:
+1) A is on the top of the stack
+2) x is the first symbol of input to be read
+Where A is non-terminal (in N), and x is terminal (in T).
+
+Definition of an LL(1) Grammar:
+For all $A \in N,\ x \in T,\ |Predict(A,x)| \leq 1$
+
+Meaning of LL(1):
+L - left-to-right input
+L - leftmost derivation
+(1) - one token of "look ahead" (in terms of input)
+
+## Constructing a Predictor Rable from Search Trees
+
+Recall the CFG:
+```
+1. S' -> <START>S<END>
+2. S -> AyB
+3. A -> ab
+4. A -> cd
+5. B -> z
+6. B -> wz
+```
+
+Let "." be an error
+
+COLS are input (x). ROWS are non-terminating chars (A)
+
+|    | a | b | c | d | y | w | z | `<START>` | `<END>` |
+|----|---|---|---|---|---|---|---|---------|-------|
+| S' | . | . | . | . | . | . | . | 1       | .     |
+| S  | 2 | . | 2 | . | . | . | . | .       | .     |
+| A  | 3 | . | 4 | . | . | . | . | .       | .     |
+| B  | . | . | . | . | . | 6 | 5 | .       | .     |
+
+Adding a new rule is easy!
+Let's add `B -> epsilon`
+
+We just change ROW:B - COL:`<END>` from an error to using rule 7
+
+## Algorithm for constructing a Predictor Table
+
+Below: $\alpha, \beta \in (N \cup T)$* ; $x,y \in T; A \in N$
+
+Empty($\alpha$) = true if $\alpha$ =>* $\epsilon$  
+can $\alpha$ disappear?
+
+First($\alpha$) = {x | $\alpha$ =>* x$\beta$} 
+starting from $\alpha$, what can I generate as the first terminal?
+
+Follow($\alpha$) = {y | S' =>* $\alpha$Ay$\beta$}
+starting from the start symbol, does the terminal y ever appear following a non-terminal A?
+
+
+**Predict(A,x) = { A -> $\alpha$ | x $\in$ First($\alpha$) } $\cup$ { A -> $\beta$ | x $\in$ Follow(A) and Empty($\beta$) }**
+
+## LL(1) Parsing Algorithm
+
+Input: w
+```
+push S'
+for each x in w:
+	while (top of stack is some A in N):
+    	pop A
+        if Predict(A,x) = {A -> a}:
+        	push a
+        else:
+        	reject
+    pop c
+    if c != x:
+    	reject
+accept w
+```
+
+## Non LL(1) Grammars:
+
+Consider the grammar:
+```
+1. S -> ab
+2. S -> acb
+```
+
+We cannot tell if we should use rule 1,2 in the case where we have an S followed by a a.
+
+If we could look ahead 2 chars, we would be able to tell...
+
+We can actually conver this grammar into an LL(1) by changing the rules to
+```
+1. E -> aX
+2. X -> b
+3. X -> cb
+```
+
+## Non LL(1) Language
+
+L = {a^n^b^m^ | n >= m >= 0}
+
+Grammar (ambiguous):
+```
+1. S -> epsilon
+2. S -> aSb
+3. S -> aS
+```
+
+Grammar (unambiguous):
+```
+B is "balanced a and b"
+U is "unbalanced a and b"
+1. S -> B
+2. S -> U
+3. B -> epsilon
+4. B -> aBb
+5. U -> aB
+6. U -> aU
+```
+
+This language is actually not LL(k) for _Any_ k!
+
+# Lecture 14
+
