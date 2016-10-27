@@ -1699,3 +1699,134 @@ This language is actually not LL(k) for _Any_ k!
 
 # Lecture 14
 
+## Bottom-up parsing (LR parsing)
+
+In LL/top-down parsing we have
+\- input processed + stack = current derivation
+\- note that the stack is read from top to bottom
+
+In LR/bottom-up parsing on the other hand, we hace
+\-stack + input to be read = current derivation
+\-stack is read from bottom to top
+
+## A Trace of `<START>abywz<END>`
+
+Derivaiton | Stack | Input Read | Unread Input | Action
+-|-|-|-|-
+`<START>abywz<END>`|$\epsilon$|$\epsilon$| `<START>abywz<END>` | Shift `<START>`
+`<START>abywz<END>`|`<START>`|`<START>`| `abywz<END>` | Shift `a`
+`<START>abywz<END>`|`<START>a`|`<START>a`| `bywz<END>` | Shift `b`
+`<START>abywz<END>`|`<START>ab`|`<START>ab`| `ywz<END>` | Reduce `A -> ab`
+`<START>Aywz<END>`|`<START>A`|`<START>ab`| `ywz<END>` | Shift `y`
+`<START>Aywz<END>`|`<START>Ay`|`<START>aby`| `wz<END>` | Shift `w`
+`<START>Aywz<END>`|`<START>Ayw`|`<START>abyw`| `z<END>` | Shift `z`
+`<START>Aywz<END>`|`<START>Aywz`|`<START>abywz`| `<END>` | Reduce `B -> wz`
+`<START>AyB<END>`|`<START>AyB`|`<START>abywz`| `<END>` | Reduce `S -> AyB`
+`<START>S<END>`|`<START>S`|`<START>abywz`| `<END>` | Shift `<END>`
+`<START>S<END>`|`<START>S<END>`|`<START>abywz<END>`|$\epsilon$| Reduce `S' -> S`
+`S'`|`S'`|`<START>abywz<END>`|$\epsilon$| ACCEPT
+
+Shift: moving a token from one place to another (push)
+Reduce: size of the stack may be rediced (pop RHS, push LHS)
+
+## Shift/Reduce
+
+Somehow we shifted at just the right time, and reduced just at the right time. How did we know this?
+
+Recall that for LL(1) parsing, we had a predictor table
+For LR(1) parsing, we have an oracle, in the form of a DFA
+
+## Constructing a DFA Oracle for LR(1) Grammars
+
+This is difficult to do.
+Donald Knuth proved a theorem that for any LR(1) grammar, you can construct a DFA (really a transducer) that tells us when to shift or reduce. But this doesn't mean it's easy....
+
+## Building an LR(0) Automaton
+
+Definition: An _item_ is a production rule with a dot ($\bullet$) somewhere on the RHS (which indicated a partially completed rule)
+How to construct it:
+1) Make the start state the first rule, with the dot ($\bullet$) in front of the left-most symbol of the RHS
+2) For each state, label an arc with the symbol that follows $\bullet$ and advanced the $\bullet$ one position to the right in the next state
+3) If the $\bullet$ preceded a non-terminal (e.g: A), add all productions with that non-terminal A on the LHS to the current state, with the $\bullet$ in the leftmost position
+
+## Example:
+Consider this Grammar:
+```
+S' -> <START>E<END>
+E -> E + T
+E -> T
+T -> id
+```
+It catches sequences of additions
+
+![lr0_dfa.jpg](./lr0_dfa.jpg)
+
+#### Image brought to you by: James Hageman
+
+## Using the Automaton
+```
+For each input token:
+	Start in the start state
+    Read the stack (from the bottom up) and read the current input
+      and do the action indicated for the current input
+  		If there is a transition out of our current state
+        	Shift (push) that input onto the stack
+        We know that we can reduce if the current state has only 
+          one term and (dot) is the rightmost symbol
+          	Reduce (pop) the RHS off tehe stack
+            reread the stack (from bottom up)
+            follow teh transitions for the LHS
+            push the LHS onto the stack
+Accept if S' is on the stack when all input is read
+```
+
+## Using the Transducer Example `<START>id+id+id<END>`
+
+Stack | States Visited | Input Read | Unread Input | Action
+- | - | - | - | -
+$\epsilon$ | 1 | $\epsilon$ | `<START>id+id+id<END>` | Shift `<START>`
+`<START>` | 1, 2 | `<START>` | `id+id+id<END>` | Shift `id`
+`<START>id` | 1, 2, 6 | `<START>id` | `+id+id<END>` | Reduce `T -> id`
+`<START>T` | 1, 2, 5 | `<START>id` | `+id+id+id<END>` | Reduce `E -> T`
+`<START>E` | 1, 2, 3 | `<START>id` | `+id+id+id<END>` | Shift `+`
+`<START>E+` | 1, 2, 3, 7 | `<START>id+` | `id+id<END>` | Shift `id`
+`<START>E+id` | 1, 2, 3, 7, 6 | `<START>id+id` | `+id<END>` | Reduce `T -> id`
+`<START>E+T` | 1, 2, 3, 7, 8 | `<START>id+id` | `+id<END>` | Reduce `E -> E+T`
+`<START>E` | 1, 2, 3 | `<START>id+id` | `+id<END>` | Shift +
+`<START>E+` | 1, 2, 3, 7 | `<START>id+id+` | `id<END>` | Shift id
+`<START>E+id` | 1, 2, 3, 7, 6 | `<START>id+id+id` | `<END>` | Reduce `T -> id`
+`<START>E+T` | 1, 2, 3, 7, 8 | `<START>id+id+id` | `<END>` | Reduce `E -> E + T`
+`<START>E` | 1, 2, 3 | `<START>id+id+id` | `<END>` | Shift `<END>`
+`<START>E<END>` | 1, 2, 3, 4 | `<START>id+id+id<END>` | $\epsilon$ | Reduce `S' -> <START>E<END>`
+`S'` | 1 | `<START>id+id+id<END>` | $\epsilon$ | ACCEPT
+
+## What can go wrong? A Problem...
+
+What if the state looks like this:
+```
+A -> a(dot)cb
+B -> g(dot)
+```
+
+Do we try to shift the next char, or do we reduce
+
+This is called a _shift reduce conflict_
+
+Alternatively:
+
+What if the state looks like this:
+```
+A -> a(dot)
+B -> b(dot)
+```
+
+do we reduce by `A -> a`, or do we reduce by `B -> b`
+
+This is known as a _reduce reduce conflict_
+
+If any item `A -> a(dot)` occurs in a state in which it is not alone, then there is a shift-reduce or reduce-reduce conflict, and that means that the grammar is not LR(0)
+
+
+
+
+# Lecture 15
