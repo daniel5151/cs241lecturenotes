@@ -1826,7 +1826,102 @@ This is known as a _reduce reduce conflict_
 
 If any item `A -> a(dot)` occurs in a state in which it is not alone, then there is a shift-reduce or reduce-reduce conflict, and that means that the grammar is not LR(0)
 
-
-
-
 # Lecture 15
+
+## Example with Conflicts
+
+Consider right-associative expressions. Modifying our grammar slightly to allow this (i.e: reverse RHS of second rule)
+
+```
+S' -> <START>E<END>
+E -> T + E
+E -> T
+T -> id
+```
+
+![lec15_diagram1.png](./lec15_diagram1.png)
+
+## Parsing with Conflicts
+
+Suppose we are parsing a string that looks like `<START>id...`
+
+Question: Should we reduce `E -> T`?
+Answer: it deptends...
+if input is `<START>id<END>`, then yes
+if input is `<START>id+...`, then no
+
+## SLR(1) Parser
+
+When we add this one lookahead character of a lookahead, we have an SLR(1) parser (SLR(1) = Simple LR with 1 character of lookahead)
+SLR(1) resolves many, but not all, conflicts
+\- LR(1) parsing is more sopfisticated than SLR(1) parsers
+\- LR(1) parses strictly more grammars
+\- LR(1) automation is more complex
+\- LR(1) and SLR(1) are identical parsing algorithms, the only difference is in the respecting outomation they create
+There is also a parser called LALR(1) which falls between SLR(1) and LR(1). LALR(1) = Lookahead LR(1)
+
+## Making this more efficient
+
+Current running time of this algorithm: O(|w|^2^)
+
+Instead of scanning the stack each time, we can instead store (input, state) on the stack
+Start the transducer in state @ the top of the stack
+
+Running time is not only O(|w|)
+
+## Outputting a Derivation
+In top down parsing: output the rules  used to expand by
+In bottom-up parsing: It's simple: every thime we do a reduction, just output the rule. BUT this isn't quite right, since Derivations should start with the Start symbol, but with Bottom Up parsing, this is not the case... A Simple Observation
+
+Didn't we say that this was LR(1) parsing?
+Yep! LR(0) and SLR(1) are both contained within LR(1)
+
+Doesn't "R" mean rightmost derivation?
+Yep!
+
+Aren't ew always reducing the leftmost non-terminal?
+Yes, but that is hard to see.
+
+Notice the direction we are creating the derivation...
+Write the derivation in reverse.
+
+## Outputting the Parse Tree
+
+Create a "tree stack"
+
+Each time we reduce, pop the right hand side nodes from the tree stack
+
+push the left-hand side node and make its children the nodes we just popped
+
+Example: `<START>id+id+id<END>`
+
+![lec15_diagram2.png](./lec15_diagram2.png)
+
+## Going Back
+
+Looking at L = {a^n^b^m^ | n >= m >= 0} (the non LL(k) langauge)
+```
+1. S' -> <START>S<END>
+2. S -> aS
+3. S -> T
+4. T -> aTb
+5. T -> \epsilon
+```
+
+What do we do when we see the symbol:
+`<START>` - shift
+`a` - shift
+`b` - reduce by 5 (only on the first b), then shift, then reduce by 4
+`<END>` - reduce by 3, repeatedly reduce by 2, shift, reduce by 1
+
+EG: `<START>aaaabb<END>`
+
+![lec15_diagram4.png](./lec15_diagram4.png)
+
+## Func Facts
+
+Theorum: For any augmented LR(1) grammar, there is an equivalent LR(0) grammar
+
+Theorem: The class of languages that can be parsed deterministically with a stack can be represented with an LR(1) grammar
+
+# Lecture 16
