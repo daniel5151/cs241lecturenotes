@@ -1918,10 +1918,177 @@ EG: `<START>aaaabb<END>`
 
 ![lec15_diagram4.png](./lec15_diagram4.png)
 
-## Func Facts
+## Fun Facts
 
 Theorum: For any augmented LR(1) grammar, there is an equivalent LR(0) grammar
 
 Theorem: The class of languages that can be parsed deterministically with a stack can be represented with an LR(1) grammar
 
 # Lecture 16
+
+## Big Picture of WLP4 Compilation
+
+![compilation_big_picture.png](./compilation_big_picture.png)
+
+#### Zooming into the compiler:
+
+![compiler.png](./compiler.png)
+
+## Example:
+
+Consider the input file
+```cpp
+int wain (int a, int b) {
+	return a;
+}
+```
+
+The tokens we get from the scanner would be:
+```cpp
+INT WAIN LPAREN INT ID COMMA INT ID RPAREN LBRACK RETURN ID SEMI RBRACK
+```
+
+The parse tree might would thus look like:
+
+![parestree.png](./parestree.png)
+
+## Context Sensitive Analysis
+
+_Where_ the statement occurs matters
+Input: parse tree (therefore, the program is already syntactically valid)
+Output: If the parse tree is semantically incorrect, then error, otherwise, output the same parse tree...
+
+Basically: This is just a "check" step
+
+You can optionally "add" some info to the outputted parse tree that makes code generation easier
+
+## Possible Errors:
+If a program is syntactically valid, what else can go wrong?
+_Variables:_ Types
+_Variables:_ Dupliacte
+_Variables:_ Undeclared
+_Procedures:_ Undeclared
+_Procedures:_ Duplicate
+_Procedures:_ types consumed and produced values
+_Procedures and Variables:_ type of calling vars must match procedure decl. type
+_Procedures and Variables:_ scope of variables in/out of procedures
+
+## Solving the "Variable Declaration" Problems
+We've done this already!
+Just use a **Symbol Table!**
+
+This solves undeclared and duplicate variable problems...
+
+We can also solve the variable type problem with the symbol table by adding a column to the table for the _type_ of the variable...
+
+So, 3 cols: `| name | location | type |`
+
+Consider:
+```cpp
+int wain(int a, int b) {
+	return x;
+}
+```
+`x` is undeclared, and we can catch this by checking if x is int the symbol table when it is used
+
+Consider:
+```cpp
+int wain(int a, int a) {
+	return a;
+}
+```
+`a` is duplicated, and we can catch this by checking for if a var is already in the symbol table when it is attempting to be defined.
+
+## Procedures Bite Us
+
+consider:
+```cpp
+int wain() {
+	int x = 0;
+	return 1;
+}
+
+int wain(int a, int b) {
+	int x = 0;
+    int y = 0;
+    y = g();
+    return 1;
+}
+```
+
+There are several things wrong here:
+1) "false positive" on `x` being a duplicate variable (when using a global symbol table)
+2) undefined function `g()`
+3) duplicate procedure names (wain x2)
+
+## Solving "Duplicate / Undeclared" Procedures & Variables At the Same Time
+
+For each procedure, we make it's own symbol table
+Make a global symbol table for procedures
+\- table should hold `| name | type | param types |`
+
+## Obtaining Signatures
+
+Signature: parameter types, and # of parameters
+
+To get this info, we can leverage our grammar:
+```
+paramlist -> dcl
+paramlist -> dcl COMMA paramlist
+dcl -> type ID
+params -> \epsilon
+```
+
+dcl will eventually give us the type!
+if params is empty tho, then that means we have an empty signature
+
+Note: in WLP4, the only return type is `int`, so that makes life a bit easier
+
+## Why Types Matter
+
+Recall: looking at bits doesn't actually tell us what they represent...
+
+Types help us remember what exactly a variable _means_
+
+So, if we had code like
+```cpp
+int* a = NULL;
+a = 7 			// should probably be prevented...
+```
+
+In WLP4, there are only 2 types: `int` and `int*`
+
+## Solving the "Type Mismatch" Problems
+
+See the "WLP4 semantic rules" handout from the website
+
+Notation: $\frac{assumptions}{consequences}$
+To type check:
+\- make sure that all the rules in the handout are met wehn computing the type of an expression
+\- Make sure that the left hand side type (lvalue) is the same as the right hand side type (expr)
+
+Hint: pointers make life more "interesting"
+
+And as always: _if it's not in the rules sheet, it ain't valid!_
+
+## Types of Indentifiers
+
+Look in my symbol table for the type of a praticular ID
+
+Big goal of A8:
+Be able to typecheck an expression like `x = t + r - s`
+
+## Addition and Subtraction are Hard
+
+```
+int  + int  -> int
+int* + int  -> int*
+int  + int* -> int*
+int* + int* -> ERROR
+int  - int  -> int
+int* - int  -> int*
+int  - int* -> ERROR
+int* - int* -> int   // offset between two addresses: # of elements between them
+```
+
+# Lecture 17
