@@ -1934,6 +1934,11 @@ Theorem: The class of languages that can be parsed deterministically with a stac
 
 ![compiler.png](./compiler.png)
 
+Recall:
+Lexical = If you are using valid _words_ (not neccessarily order)
+Syntactic = If you are using the right words in the _right order_
+Semantic = If you are using the right words in the right order _with respect to other special rules_
+
 ## Example:
 
 Consider the input file
@@ -1969,9 +1974,9 @@ _Variables:_ Dupliacte
 _Variables:_ Undeclared
 _Procedures:_ Undeclared
 _Procedures:_ Duplicate
-_Procedures:_ types consumed and produced values
+_Procedures:_ Types of paramerters and return values
 _Procedures and Variables:_ type of calling vars must match procedure decl. type
-_Procedures and Variables:_ scope of variables in/out of procedures
+_Variables and Procedures:_ scope of variables in/out of procedures
 
 ## Solving the "Variable Declaration" Problems
 We've done this already!
@@ -2091,4 +2096,340 @@ int  - int* -> ERROR
 int* - int* -> int   // offset between two addresses: # of elements between them
 ```
 
+## Follow the spec to the tee!
+
+There is a Spec Sheet of the 241 website that outlines EXACTLY how types can be used in all the various contexts!
+Follow it!
+
+------
+
+**NOTE:** I switched to Troy Vasiga's lecture section, so there might be shift in notes from this point...
+
+------
+
 # Lecture 17
+
+## More advanced context-sensitive analysis
+
+"Real" languages add more complexity (see CS444/CS442)
+They have things like:
+- Scope
+	- if-statements, while loops may have variable declarations
+	- *in WLP4, all declarations are at the top of functions
+- User-defined types
+	- classes, structs, objects
+- Nested Pointers
+	- terrible things like `*****a`
+- OOP stuff
+	- inheritance, overloading...
+
+All of this stuff adds a stupid ammount of complexity.
+Don't take CS444/CS442 unless your body is ready.
+
+## Code Generation for WLP4MPMP
+**WLP4MPMP** = Waterloo Language Plus Pointers Plus Procedures Minus Pointers Minus Procedures 
+
+AKA **WL**
+
+## Code Generation (A9, A10)
+
+Input:
+1) Parse Tree (that is guaranteed to be Semantically Valid)
+2) Symbol Table for Procedures and Variables
+
+Output:
+MIPS assembly language (*equivalent* to wlp4 program in terms of output and return values)
+
+Outputs will vary from person to person, since there are different ways to do the same things with MIPS assembly.
+
+## Code Generation Issues
+
+- Correctness
+	- guaranteed to generate code with the correct meaning
+	- ***this is the minimum requirement***
+- Ease of writing compiler
+	- this is kind of language specific...
+		- WLP4 is "easy"
+		- C++ is not easy
+- Efficiency of the compiler
+	- the speed of compilation
+		- Namely, have it to be O(n)
+		- O(n^2^) is a instafail (for WLP4)
+- Efficiency of the compiled code
+	- how fast the generated code runs
+	- this boils down to Optimizations
+		- don't focus on this until you have a compiler the WORKS
+
+## Syntax Directed Translation
+
+Fundamental idea: traverse (go all the way down, and climb up) the parse tree and gather information.
+
+## First Rule
+
+`main -> INT WAIN LPAREN dcl COMMA dcl COMMA...` becomes
+```
+code(main) = <stuff>         "+"
+             code(dcl1)      "+"
+             code(dcl2)      "+"
+             code(dcls)      "+"
+             code(statement) "+"
+             code(expr)      "+"
+             <more stuff>
+```
+`"+"` means that don't actually do string concatenation (that becomes O(n^2^) in runtime, which is bad)
+
+**TL;DR: Ya code is gonna be recursive!**
+
+## Three more simple rules
+
+`statements -> epsilon` becomes
+```
+code(statements) = ""
+```
+
+`expr -> term`
+```
+code(expr) = code(term)
+```
+
+`term -> factor`
+```
+code(term) = code(factor)
+```
+
+In general:
+if `a -> b` then `code(a) = code(b)`
+where a and b are non-terminals
+
+## A9P1
+Recall that input must be semantically valid
+what do the WLP4 programs look like?
+
+```
+int wain(int a, int b) {
+	return a; // OR return b;
+}
+```
+
+That's all of 'em.
+
+The parse tree will thus look something like this:
+```
+-------------------------------------- main --------------------------------------
+|    |     |     |    |    |    |       |    |        |       |     |     |      |
+INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+                / \       / \                 |       |              |
+             type  ID   type ID            epsilon  epsilon         term
+              |           |                                          |
+             INT         INT                                       factor
+                                                                     |
+                                                                     ID
+```
+
+What do the equivalent MIPS programs look like?
+
+Assuming 1st param is in $1, and 2nd param is in \$2, and return value is placed in \$3
+
+Well, it's either
+```
+add $3, $1, $0
+jr  $31
+```
+
+or
+```
+add $3, $2, $0
+jr  $31
+```
+
+ggez
+
+(theoretically, you can literally just write an if statement to solve this assignment question...)
+
+## Changes to the symbol table
+
+This table is generated in A8
+
+Name | Type | Location
+- | - | -
+a | int | $1
+b | int | $2
+
+For all of A9: Type is always `int`, Locations are Registers...
+
+## How to store variables
+
+Option A: Variables in Registers
+One variable per register, stored somehow in the symbol table.
+
+Problems > 32 variables...
+
+Option B: Variables in RAM using .word
+Each variable x in WLP4 program corresponds to label x in MIPS
+
+Example:
+Ouptut MIPS code like
+```
+...
+jr $31
+; allocated variables
+a: .word 0
+b: .word 0
+c: .word 0
+
+```
+
+Problems:
+
+Problem 1) Getting the value of `c` for example:
+```
+lis $3        ; THESE LINES ARE OVERHEAD
+.word c       ; (and lead to poop efficiency)
+lw $3, 0($3)
+```
+This way of doing vars almost DOUBLES code length!
+
+Problem 2) Name Clashing
+In A10, there are multiple procedures that might have the same names...
+
+## The best way to store variables
+
+Option C: Variables on the Stack
+
+Suppose we have n variables
+How to get n? => Just look at the size of the symbol table!
+
+Here is what we propose..
+The Stack
+```
+|           |
+|           |
+-------------
+| initial c |
+-------------
+| initial b |
+------------- memloc in $29
+| initial a |
+------------- memloc in $30
+```
+
+The associated Symbol Table:
+
+Name | Type | Location
+- | - | -
+a | int | 2
+b | int | 1
+c | int | 0
+
+With this method, we can easily find the address of the *i*th variable, simply by doing $30 + 4 * i
+
+But, what about $30 having to change?
+
+lets use another register, register \$29
+\$29 will be the **frame pointer**, and it will point to the "bottom" variable
+
+Now, we can find the *i*th variable by doing $29 + 4 * i
+
+## Some conventions
+
+Special Registers:
+- $0 = always 0, that we will treat as **False**
+- $1 = value of 1st parameter, initially
+- $2 = value of 2nd parameter, initially
+- $3 = return value
+- $30 = stack pointer
+- $31 = return address
+
+Also, convention dictates that
+- $4 = 4
+- $11 = 1 , that we will treat as **true**
+- $29 = Frame Pointer (where the variables are)
+
+## Code Structure
+
+Prologue:
+Define all of the constants we need, and misc setup
+```
+lis   $4
+.word 4
+lis   $11
+.word 1
+<store $31>
+<store variables / setup $29>
+```
+Generated Code:
+self explanatory...
+
+Epilogue
+Cleanup
+```
+<restore $31>
+jr    $31
+```
+
+## One More Rule (A9P2)
+
+`factor -> LPAREN expr RPAREN`
+
+now you can have code like
+```
+int wain(int x, int y) {
+	return (x); // or return ((x)), and so on...
+}
+```
+
+This code will actually return the exact same MIPS as A9P1!
+
+## A9P3 - Full Expressions
+
+so, things like
+```
+int wain(int a, int b) { 
+	return a + b;
+}
+```
+are fair game.
+
+That code might result in
+```
+add $3, $1, $2
+jr  $31
+```
+
+You can also have
+```
+int wain(int a, int b) { 
+	return a + b + a;
+}
+```
+
+How might the code for that look like?
+
+Well, we have a rule `expr -> expr PLUS term`, so the parse tree looks something like this...
+```
+          _____ expr _____
+         /       |        \
+    __ expr __  PLUS      term
+   /    |     \            |
+ expr  PLUS  term        factor
+  |           |            |
+ term       factor       ID (a)
+  |           |
+ factor     ID (b)
+  |
+ID (a)
+```
+
+Note that if we try and store the valie of the left-side of the tree in $3, and also do the same with the right hand side of the tree, the value in \$3 is overwritten!
+
+Solution?
+
+USe the stack!
+
+`expr1 -> expr2 PLUS term`
+```
+code (expr1) = code(exp2) + push($3) + ... END OF LECTURE
+```
+
+
+# Lecture 18
