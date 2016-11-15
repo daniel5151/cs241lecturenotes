@@ -2424,12 +2424,210 @@ Note that if we try and store the valie of the left-side of the tree in $3, and 
 
 Solution?
 
-USe the stack!
+Use the stack!
 
 `expr1 -> expr2 PLUS term`
 ```
-code (expr1) = code(exp2) + push($3) + ... END OF LECTURE
+code(expr1)  =   code(exp2) // $3 = value of expr2
+               + push($3)   // push $3 onto the stack
+                            //   sub $30, $30, $4
+                            //   sw  $3, 0($30)
+               + code(term) // $3 = term
+               + pop($5)    // pop from the stack into $5
+                            //   lw  $3, 0($30)
+                            //   add $30, $30, $4
+               + "add $3, $5, $3"
 ```
 
-
 # Lecture 18
+
+#A9P4: Printing
+
+`statements -> PRINTLN LPAREN expr RPAREN SEMI`
+
+A First Attempt:
+```
+code(statements) =   code(expr) // $3 = value of expr
+                   + move $3 to $1
+                   + call print (a function we have)
+```
+
+Problems:
+1) destroys \$1
+2) destroys \$31
+
+## Sidenote: Where is print?
+We are given `print` in a merl file, so really, all we need is an `import print` in the Prologue
+
+```
+code(statements) =   code(expr)
+				   + "add $1, $3, $0"
+				   + "lis $5"
+				   + ".word print"
+				   + push ($31)
+				   + "jalr $5"
+				   + pop($31)
+```
+
+## How do we not destroy \$1
+
+1) try different calling conventions?
+eg: make `print` get it's argument from \$3
+
+NO! Don't do this! This is extremely bad!
+All previous code that uses `print` is broken!
+
+2) save register \$1 before and after calling print
+
+Okay... but it adds a significant ammount of overhead. 4 instructions per call.
+
+3) stop worrying: do nothing.
+
+## A special note about parameters in \$1 and \$2
+
+### They are not special.
+
+We save these on the fram at `0($29)` and `-4($29)` as soon as we see them, so there is no reason to care about \$1 and \$2 !
+
+## Other Advice about A9
+
+- Comment both the code you write, AND the code that you generate! 
+	- When things go wrong, and the MIPS doesn't work, having comments that help you understand what a chunk of MIPS is supposed to do will help a lot!
+- Use a rule-based structure
+	- each grammar rule will represent one function/procedure/step in our compilation process
+	- the parse tree indicates which subtrees need to produce the code before the "entire" code has been produced
+- Read the WHOLE assignment before starting and PLAN ahead
+- test, test, test (or don't, but in that case, good luck fam)
+
+## Declarations (A9P5)
+
+Adds the rule `dcls -> dcls dcl BECOMES NUM SEMI`
+i.e: there can be as many declarations as we want.
+
+Recall:
+- Variables on the frame
+- Symbol table stores all declared variables
+	- each variable has an offset (eg: ith var is located at \$29 + 4*i)
+
+## Giving variables values
+
+The code to do that `BECOMES NUM SEMI` part of the rule, we write some code like:
+```
+  code(NUM)         // basically, put the number in NUM into $3
++ "sw $3, 4*i($29)" // (calc 4*i when compiling using the SymbolTable)
+```
+
+Also, what about the rule `statement -> lvalue BECOMES expr SEMI` (for now, lvalue is just and ID, not pointers yet...)
+
+```
+code(statement) =   code(expr)
+				  + "sw $3, 4+i($29)" \\ i is the offset of the ID in the LHS
+```
+
+## Booleans (A9P6)
+
+The only spot where booleans are allowed are in control structures (like if, while)
+
+Rule: `test -> expr1 LT expr2`
+
+Recall conventions:
+\$0 = 0 = false
+\$11 = 1 = true
+
+MIPS code:
+```
+code(test) =   code(expr1) // $3 = expr1
+			 + push($3)
+			 + code(expr2) // $3 = expr2
+			 + pop($5)
+			 + "slt $3, $5, $3"
+```
+
+## While loop (A9P6)
+
+`statement -> WHILE LPAREN test RPAREN LBRACE statements RBRACE`
+
+MIPS code:
+```
+code(statement) =   "loopY:"
+				  + code(test)              // $3 = test (0 or 1)
+				  + "bne $3, $11, endloopY" // if my test failed, end the loop
+				  + code(statements)
+				  + "beq $0, $0, loopY"
+				  + "endloopY:"
+
+// for Y = 0, 1, 2 ... for every while loop in the program
+```
+
+There is a long range problem: what if we have a really long while loop...
+Branches only let you jump +- 2^15^ (approx 32 000) words
+
+Solution: Instead of using `beq $0, $0, label`, do
+```
+lis $5
+.word loop
+jr $5
+```
+
+## If statement (A9P8)
+
+`statement -> IF test ... statements1 ... ELSE ... statements2 ...`
+
+```
+code(statement) =   code(test) // $3 is 0 or 1
+				  + "bne $3, $11, elseX"
+				  + code(statements1)
+				  + "beq $0, $0, endIfX"
+				  + "elseX: "
+				  + code(statements2)
+				  + "endIfX: "
+
+// for X = 0, 1, 2 ... for every while loop in the program
+```
+
+## Back to booleans (A9P7)
+
+`test -> expr1 GT expr2`
+
+```
+//we use this chunk of code a lot...
+A(a,b) = return   code(a)
+		   	 + push($3)
+	   		 + code(b)
+	   		 + pop($5)
+
+code(test) =   A(expr1, expr2)
+			 + slt $3, $3, $5
+```
+
+`test -> expr1 NE expr2`
+
+```
+code(test) =   A(expr1, expr2)
+			 + "slt $6, $5, $3"
+			 + "slt $7, $3, $5"
+			 + "add $3, $6, $7"
+```
+
+## Finishing Booleans (A9P7)
+
+`test -> expr1 EQ expr2`
+
+```
+code(test) =   code(NE)          // (literally the code to do not equal)
+			 + "sub $3, $11, $3" // negates this
+```
+
+`test -> expr1 GE expr2`
+```
+code(test) =   code(LT)			 // (literally the code to do less than)
+			 + "sub $3, $11, $3" // negates this
+```
+
+`test -> expr LE expr`
+```
+code(test) =   code(GT) 			// (literallt the code to do greater than)
+			 + "sub $3, $11, $3"
+```
+
+# Lecture 19
