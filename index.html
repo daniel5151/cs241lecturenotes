@@ -1240,6 +1240,155 @@
 170
 </span-->
 </li>
+<li><span class="title">
+<a href="#sidenote:-where-is-print?" title="Sidenote: Where is print?">Sidenote: Where is print?</a>
+</span>
+<!--span class="number">
+171
+</span-->
+</li>
+<li><span class="title">
+<a href="#how-do-we-not-destroy-\$1" title="How do we not destroy $1">How do we not destroy $1</a>
+</span>
+<!--span class="number">
+172
+</span-->
+</li>
+<li><span class="title">
+<a href="#a-special-note-about-parameters-in-\$1-and-\$2" title="A special note about parameters in $1 and $2">A special note about parameters in $1 and $2</a>
+</span>
+<!--span class="number">
+173
+</span-->
+<ul>
+<li><span class="title">
+<a href="#they-are-not-special." title="They are not special.">They are not special.</a>
+</span>
+<!--span class="number">
+174
+</span-->
+</li>
+</ul>
+</li>
+<li><span class="title">
+<a href="#other-advice-about-a9" title="Other Advice about A9">Other Advice about A9</a>
+</span>
+<!--span class="number">
+175
+</span-->
+</li>
+<li><span class="title">
+<a href="#declarations-(a9p5)" title="Declarations (A9P5)">Declarations (A9P5)</a>
+</span>
+<!--span class="number">
+176
+</span-->
+</li>
+<li><span class="title">
+<a href="#giving-variables-values" title="Giving variables values">Giving variables values</a>
+</span>
+<!--span class="number">
+177
+</span-->
+</li>
+<li><span class="title">
+<a href="#booleans-(a9p6)" title="Booleans (A9P6)">Booleans (A9P6)</a>
+</span>
+<!--span class="number">
+178
+</span-->
+</li>
+<li><span class="title">
+<a href="#while-loop-(a9p6)" title="While loop (A9P6)">While loop (A9P6)</a>
+</span>
+<!--span class="number">
+179
+</span-->
+</li>
+<li><span class="title">
+<a href="#if-statement-(a9p8)" title="If statement (A9P8)">If statement (A9P8)</a>
+</span>
+<!--span class="number">
+180
+</span-->
+</li>
+<li><span class="title">
+<a href="#back-to-booleans-(a9p7)" title="Back to booleans (A9P7)">Back to booleans (A9P7)</a>
+</span>
+<!--span class="number">
+181
+</span-->
+</li>
+<li><span class="title">
+<a href="#finishing-booleans-(a9p7)" title="Finishing Booleans (A9P7)">Finishing Booleans (A9P7)</a>
+</span>
+<!--span class="number">
+182
+</span-->
+</li>
+<li><span class="title">
+<a href="#pointer-basics-(a10p1)" title="Pointer Basics (A10P1)">Pointer Basics (A10P1)</a>
+</span>
+<!--span class="number">
+183
+</span-->
+</li>
+<li><span class="title">
+<a href="#using-address-of-(&amp;)" title="Using Address-of (&amp;)">Using Address-of (&amp;)</a>
+</span>
+<!--span class="number">
+184
+</span-->
+</li>
+<li><span class="title">
+<a href="#code-for-&amp;" title="Code for &amp;">Code for &amp;</a>
+</span>
+<!--span class="number">
+185
+</span-->
+</li>
+<li><span class="title">
+<a href="#assignment-to-pointer-dereference" title="Assignment to pointer dereference">Assignment to pointer dereference</a>
+</span>
+<!--span class="number">
+186
+</span-->
+</li>
+<li><span class="title">
+<a href="#a-" title="A “simple” WLP4 Program">A “simple” WLP4 Program</a>
+</span>
+<!--span class="number">
+187
+</span-->
+</li>
+<li><span class="title">
+<a href="#what-mips.array-is-doing" title="What mips.array is doing">What mips.array is doing</a>
+</span>
+<!--span class="number">
+188
+</span-->
+</li>
+<li><span class="title">
+<a href="#a-second-example" title="A Second Example">A Second Example</a>
+</span>
+<!--span class="number">
+189
+</span-->
+</li>
+<li><span class="title">
+<a href="#back-to-compilation-(a10p2)" title="Back to Compilation (A10P2)">Back to Compilation (A10P2)</a>
+</span>
+<!--span class="number">
+190
+</span-->
+</li>
+<li><span class="title">
+<a href="#pointer-arithmetic" title="Pointer Arithmetic">Pointer Arithmetic</a>
+</span>
+<!--span class="number">
+191
+</span-->
+</li>
 </ul>
 </li>
 
@@ -2646,7 +2795,7 @@ INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBR
              INT         INT                                       factor
                                                                      |
                                                                      ID
-</code></pre><p>What do the equivalent MIPS programs look like?</p><p>Assuming 1st param is in <span>$1, and 2nd param is in \$</span>2, and return value is placed in $3</p><p>Well, it’s either</p><pre><code data-origin="<pre><code>add $3, $1, $0
+</code></pre><p>What do the equivalent MIPS programs look like?</p><p>Assuming 1st param is in $1, and 2nd param is in $2, and return value is placed in $3</p><p>Well, it’s either</p><pre><code data-origin="<pre><code>add $3, $1, $0
 jr  $31
 </code></pre>">add $3, $1, $0
 jr  $31
@@ -2797,9 +2946,200 @@ ID (a)
  factor     ID (b)
   |
 ID (a)
-</code></pre><p>Note that if we try and store the valie of the left-side of the tree in <span>$3, and also do the same with the right hand side of the tree, the value in \$</span>3 is overwritten!</p><p>Solution?</p><p>USe the stack!</p><p><code>expr1 -&gt; expr2 PLUS term</code></p><pre><code data-origin="<pre><code>code (expr1) = code(exp2) + push($3) + ... END OF LECTURE
-</code></pre>">code (expr1) = code(exp2) + push($3) + ... END OF LECTURE
-</code></pre><h1 id="lecture-18"><a name="lecture-18" href="#lecture-18"></a>Lecture 18</h1>
+</code></pre><p>Note that if we try and store the valie of the left-side of the tree in <span>$3, and also do the same with the right hand side of the tree, the value in \$</span>3 is overwritten!</p><p>Solution?</p><p>Use the stack!</p><p><code>expr1 -&gt; expr2 PLUS term</code></p><pre><code data-origin="<pre><code>code(expr1)  =   code(exp2) // $3 = value of expr2
+               + push($3)   // push $3 onto the stack
+                            //   sub $30, $30, $4
+                            //   sw  $3, 0($30)
+               + code(term) // $3 = term
+               + pop($5)    // pop from the stack into $5
+                            //   lw  $3, 0($30)
+                            //   add $30, $30, $4
+               + &quot;add $3, $5, $3&quot;
+</code></pre>">code(expr1)  =   code(exp2) // $3 = value of expr2
+               + push($3)   // push $3 onto the stack
+                            //   sub $30, $30, $4
+                            //   sw  $3, 0($30)
+               + code(term) // $3 = term
+               + pop($5)    // pop from the stack into $5
+                            //   lw  $3, 0($30)
+                            //   add $30, $30, $4
+               + "add $3, $5, $3"
+</code></pre><h1 id="lecture-18"><a name="lecture-18" href="#lecture-18"></a>Lecture 18</h1><h1 id="a9p4:-printing"><a name="a9p4:-printing" href="#a9p4:-printing"></a>A9P4: Printing</h1><p><code>statements -&gt; PRINTLN LPAREN expr RPAREN SEMI</code></p><p>A First Attempt:</p><pre><code data-origin="<pre><code>code(statements) =   code(expr) // $3 = value of expr
+                   + move $3 to $1
+                   + call print (a function we have)
+</code></pre>">code(statements) =   code(expr) // $3 = value of expr
+                   + move $3 to $1
+                   + call print (a function we have)
+</code></pre><p>Problems:<br>1) destroys $1<br>2) destroys $31</p><h2 id="sidenote:-where-is-print?"><a name="sidenote:-where-is-print?" href="#sidenote:-where-is-print?"></a>Sidenote: Where is print?</h2><p>We are given <code>print</code> in a merl file, so really, all we need is an <code>import print</code> in the Prologue</p><pre><code data-origin="<pre><code>code(statements) =   code(expr)
+                   + &quot;add $1, $3, $0&quot;
+                   + &quot;lis $5&quot;
+                   + &quot;.word print&quot;
+                   + push ($31)
+                   + &quot;jalr $5&quot;
+                   + pop($31)
+</code></pre>">code(statements) =   code(expr)
+                   + "add $1, $3, $0"
+                   + "lis $5"
+                   + ".word print"
+                   + push ($31)
+                   + "jalr $5"
+                   + pop($31)
+</code></pre><h2 id="how-do-we-not-destroy-\$1"><a name="how-do-we-not-destroy-\$1" href="#how-do-we-not-destroy-\$1"></a>How do we not destroy $1</h2><p>1) try different calling conventions?<br>eg: make <code>print</code> get it’s argument from $3</p><p>NO! Don’t do this! This is extremely bad!<br>All previous code that uses <code>print</code> is broken!</p><p>2) save register $1 before and after calling print</p><p>Okay… but it adds a significant ammount of overhead. 4 instructions per call.</p><p>3) stop worrying: do nothing.</p><h2 id="a-special-note-about-parameters-in-\$1-and-\$2"><a name="a-special-note-about-parameters-in-\$1-and-\$2" href="#a-special-note-about-parameters-in-\$1-and-\$2"></a>A special note about parameters in $1 and $2</h2><h3 id="they-are-not-special."><a name="they-are-not-special." href="#they-are-not-special."></a>They are not special.</h3><p>We save these on the fram at <code>0($29)</code> and <code>-4($29)</code> as soon as we see them, so there is no reason to care about $1 and $2 !</p><h2 id="other-advice-about-a9"><a name="other-advice-about-a9" href="#other-advice-about-a9"></a>Other Advice about A9</h2><ul>
+<li>Comment both the code you write, AND the code that you generate! <ul>
+<li>When things go wrong, and the MIPS doesn’t work, having comments that help you understand what a chunk of MIPS is supposed to do will help a lot!</li></ul>
+</li><li>Use a rule-based structure<ul>
+<li>each grammar rule will represent one function/procedure/step in our compilation process</li><li>the parse tree indicates which subtrees need to produce the code before the “entire” code has been produced</li></ul>
+</li><li>Read the WHOLE assignment before starting and PLAN ahead</li><li>test, test, test (or don’t, but in that case, good luck fam)</li></ul><h2 id="declarations-(a9p5)"><a name="declarations-(a9p5)" href="#declarations-(a9p5)"></a>Declarations (A9P5)</h2><p>Adds the rule <code>dcls -&gt; dcls dcl BECOMES NUM SEMI</code><br>i.e: there can be as many declarations as we want.</p><p>Recall:</p><ul>
+<li>Variables on the frame</li><li>Symbol table stores all declared variables<ul>
+<li>each variable has an offset (eg: ith var is located at $29 + 4*i)</li></ul>
+</li></ul><h2 id="giving-variables-values"><a name="giving-variables-values" href="#giving-variables-values"></a>Giving variables values</h2><p>The code to do that <code>BECOMES NUM SEMI</code> part of the rule, we write some code like:</p><pre><code data-origin="<pre><code>  code(NUM)         // basically, put the number in NUM into $3
++ &quot;sw $3, 4*i($29)&quot; // (calc 4*i when compiling using the SymbolTable)
+</code></pre>">  code(NUM)         // basically, put the number in NUM into $3
++ "sw $3, 4*i($29)" // (calc 4*i when compiling using the SymbolTable)
+</code></pre><p>Also, what about the rule <code>statement -&gt; lvalue BECOMES expr SEMI</code> (for now, lvalue is just and ID, not pointers yet…)</p><pre><code data-origin="<pre><code>code(statement) =   code(expr)
+                  + &quot;sw $3, 4+i($29)&quot; \\ i is the offset of the ID in the LHS
+</code></pre>">code(statement) =   code(expr)
+                  + "sw $3, 4+i($29)" \\ i is the offset of the ID in the LHS
+</code></pre><h2 id="booleans-(a9p6)"><a name="booleans-(a9p6)" href="#booleans-(a9p6)"></a>Booleans (A9P6)</h2><p>The only spot where booleans are allowed are in control structures (like if, while)</p><p>Rule: <code>test -&gt; expr1 LT expr2</code></p><p>Recall conventions:<br>$0 = 0 = false<br>$11 = 1 = true</p><p>MIPS code:</p><pre><code data-origin="<pre><code>code(test) =   code(expr1) // $3 = expr1
+             + push($3)
+             + code(expr2) // $3 = expr2
+             + pop($5)
+             + &quot;slt $3, $5, $3&quot;
+</code></pre>">code(test) =   code(expr1) // $3 = expr1
+             + push($3)
+             + code(expr2) // $3 = expr2
+             + pop($5)
+             + "slt $3, $5, $3"
+</code></pre><h2 id="while-loop-(a9p6)"><a name="while-loop-(a9p6)" href="#while-loop-(a9p6)"></a>While loop (A9P6)</h2><p><code>statement -&gt; WHILE LPAREN test RPAREN LBRACE statements RBRACE</code></p><p>MIPS code:</p><pre><code data-origin="<pre><code>code(statement) =   &quot;loopY:&quot;
+                  + code(test)              // $3 = test (0 or 1)
+                  + &quot;bne $3, $11, endloopY&quot; // if my test failed, end the loop
+                  + code(statements)
+                  + &quot;beq $0, $0, loopY&quot;
+                  + &quot;endloopY:&quot;
+
+// for Y = 0, 1, 2 ... for every while loop in the program
+</code></pre>">code(statement) =   "loopY:"
+                  + code(test)              // $3 = test (0 or 1)
+                  + "bne $3, $11, endloopY" // if my test failed, end the loop
+                  + code(statements)
+                  + "beq $0, $0, loopY"
+                  + "endloopY:"
+
+// for Y = 0, 1, 2 ... for every while loop in the program
+</code></pre><p>There is a long range problem: what if we have a really long while loop…<br>Branches only let you jump +- 2<sup>15</sup> (approx 32 000) words</p><p>Solution: Instead of using <code>beq $0, $0, label</code>, do</p><pre><code data-origin="<pre><code>lis $5
+.word loop
+jr $5
+</code></pre>">lis $5
+.word loop
+jr $5
+</code></pre><h2 id="if-statement-(a9p8)"><a name="if-statement-(a9p8)" href="#if-statement-(a9p8)"></a>If statement (A9P8)</h2><p><code>statement -&gt; IF test ... statements1 ... ELSE ... statements2 ...</code></p><pre><code data-origin="<pre><code>code(statement) =   code(test) // $3 is 0 or 1
+                  + &quot;bne $3, $11, elseX&quot;
+                  + code(statements1)
+                  + &quot;beq $0, $0, endIfX&quot;
+                  + &quot;elseX: &quot;
+                  + code(statements2)
+                  + &quot;endIfX: &quot;
+
+// for X = 0, 1, 2 ... for every while loop in the program
+</code></pre>">code(statement) =   code(test) // $3 is 0 or 1
+                  + "bne $3, $11, elseX"
+                  + code(statements1)
+                  + "beq $0, $0, endIfX"
+                  + "elseX: "
+                  + code(statements2)
+                  + "endIfX: "
+
+// for X = 0, 1, 2 ... for every while loop in the program
+</code></pre><h2 id="back-to-booleans-(a9p7)"><a name="back-to-booleans-(a9p7)" href="#back-to-booleans-(a9p7)"></a>Back to booleans (A9P7)</h2><p><code>test -&gt; expr1 GT expr2</code></p><pre><code data-origin="<pre><code>//we use this chunk of code a lot...
+A(a,b) = return   code(a)
+                + push($3)
+                + code(b)
+                + pop($5)
+
+code(test) =   A(expr1, expr2)
+             + slt $3, $3, $5
+</code></pre>">//we use this chunk of code a lot...
+A(a,b) = return   code(a)
+                + push($3)
+                + code(b)
+                + pop($5)
+
+code(test) =   A(expr1, expr2)
+             + slt $3, $3, $5
+</code></pre><p><code>test -&gt; expr1 NE expr2</code></p><pre><code data-origin="<pre><code>code(test) =   A(expr1, expr2)
+             + &quot;slt $6, $5, $3&quot;
+             + &quot;slt $7, $3, $5&quot;
+             + &quot;add $3, $6, $7&quot;
+</code></pre>">code(test) =   A(expr1, expr2)
+             + "slt $6, $5, $3"
+             + "slt $7, $3, $5"
+             + "add $3, $6, $7"
+</code></pre><h2 id="finishing-booleans-(a9p7)"><a name="finishing-booleans-(a9p7)" href="#finishing-booleans-(a9p7)"></a>Finishing Booleans (A9P7)</h2><p><code>test -&gt; expr1 EQ expr2</code></p><pre><code data-origin="<pre><code>code(test) =   code(NE)          // (literally the code to do not equal)
+             + &quot;sub $3, $11, $3&quot; // negates this
+</code></pre>">code(test) =   code(NE)          // (literally the code to do not equal)
+             + "sub $3, $11, $3" // negates this
+</code></pre><p><code>test -&gt; expr1 GE expr2</code></p><pre><code data-origin="<pre><code>code(test) =   code(LT)             // (literally the code to do less than)
+             + &quot;sub $3, $11, $3&quot; // negates this
+</code></pre>">code(test) =   code(LT)             // (literally the code to do less than)
+             + "sub $3, $11, $3" // negates this
+</code></pre><p><code>test -&gt; expr LE expr</code></p><pre><code data-origin="<pre><code>code(test) =   code(GT)             // (literallt the code to do greater than)
+             + &quot;sub $3, $11, $3&quot;
+</code></pre>">code(test) =   code(GT)             // (literallt the code to do greater than)
+             + "sub $3, $11, $3"
+</code></pre><h1 id="lecture-19"><a name="lecture-19" href="#lecture-19"></a>Lecture 19</h1><h2 id="pointer-basics-(a10p1)"><a name="pointer-basics-(a10p1)" href="#pointer-basics-(a10p1)"></a>Pointer Basics (A10P1)</h2><p><code>factor -&gt; NULL</code></p><p>Note: we want dereferencing NULL to Crash and Burn</p><pre><code data-origin="<pre><code>code(factor) = &quot;add $3, $11, $0&quot;
+</code></pre>">code(factor) = "add $3, $11, $0"
+</code></pre><p>If we dereference “1” we get a “unaligned word value” error, and that is good!</p><p><code>factor1 -&gt; STAR factor2</code></p><p>We know the type of factor2 is <code>int*</code>, and that factor1 is thus a <code>int</code></p><pre><code data-origin="<pre><code>code(factor1) =   code(factor2) // $3 is some address
+                + &quot;lw $3, 0($3)&quot;
+</code></pre>">code(factor1) =   code(factor2) // $3 is some address
+                + "lw $3, 0($3)"
+</code></pre><h2 id="using-address-of-(&amp;)"><a name="using-address-of-(&amp;)" href="#using-address-of-(&amp;)"></a>Using Address-of (&amp;)</h2><p><code>factor -&gt; AMP lvalue</code></p><p>Why, you might wonder, is the rule written this way, instead of <code>factor -&gt; AMP factor</code>?</p><p>Well, we don’t want to be able to do things like:<br>- <code>&amp;5 or &amp;NULL</code><br>-<code>&amp;&amp;&amp;x</code> (since that would be of type <code>int***</code> which is not allowed)</p><p>Considering what grammat <code>lvalue</code> can have:<br>1) <code>lvalue -&gt; ID</code> - eg: <code>x = ...</code><br>2) <code>lvalue -&gt; STAR factor</code> - eg: <code>*x = ...</code><br>3) <code>lvalue -&gt; LPAREN lvalue RPAREN</code> - eg: <code>(*x) = ...</code></p><p>Also, the grammar rules disallow:<br>- <code>x + 2 = y</code> - doing the algebric<br>- <code>7 = 4</code> - redefining constants</p><h2 id="code-for-&amp;"><a name="code-for-&amp;" href="#code-for-&amp;"></a>Code for &amp;</h2><p><code>factor1 -&gt; AMP lvalue</code></p><p>We actually need to do a look ahead at what lvalue is…</p><p>Three cases:<br>1) <code>lvalue</code> is an identifier (eg: <code>&amp;x</code>)</p><pre><code data-origin="<pre><code>code(factor1) =   &quot;lis $3&quot;
+                + &quot;.word &amp;lt;offset of ID&amp;gt;&quot;
+                + &quot;add $3, $29, $3&quot;
+</code></pre>">code(factor1) =   "lis $3"
+                + ".word &lt;offset of ID&gt;"
+                + "add $3, $29, $3"
+</code></pre><p>2) <code>lvalue</code> is a <code>STAR factor2</code> - i.e: <code>&amp;*x</code><br>well, <code>&amp;*x == x</code>… sooooo</p><pre><code data-origin="<pre><code>code(factor1) = code(factor2)
+</code></pre>">code(factor1) = code(factor2)
+</code></pre><p>3) <code>lvalue</code> is a <code>LPAREN lvalue RPAREN</code></p><pre><code data-origin="<pre><code>trivial
+</code></pre>">trivial
+</code></pre><h2 id="assignment-to-pointer-dereference"><a name="assignment-to-pointer-dereference" href="#assignment-to-pointer-dereference"></a>Assignment to pointer dereference</h2><p><code>lvalue -&gt; STAR factor</code> (eg: <code>*x = 4 + 9</code>)</p><p>Let’s step back and look at the rule:<br><code>statement -&gt; lvalue BECOMES expr SEMI</code></p><p>if <code>lvalue == ID</code> do A9 stuff<br>if <code>lvalue == STAR factor</code>…</p><pre><code data-origin="<pre><code>code(statements) =   code(factor)     // $3 has an address
+                   + &quot;add $6, $3, $0&quot; // $6 has ^ addr
+                   + code(expr)       // $3 has expr
+                   + &quot;sw $3, 0($6)&quot;
+</code></pre>">code(statements) =   code(factor)     // $3 has an address
+                   + "add $6, $3, $0" // $6 has ^ addr
+                   + code(expr)       // $3 has expr
+                   + "sw $3, 0($6)"
+</code></pre><h2 id="a-" simple"-wlp4-program"=""><a name="a-" simple"-wlp4-program"="" href="#a-"></a>A “simple” WLP4 Program</h2><p>Running with mips.array (so $1 = base_adress, $2 = size)</p><pre><code data-origin="<pre><code>int wain(int *a, int n) {
+    return *a;
+}
+</code></pre>">int wain(int *a, int n) {
+    return *a;
+}
+</code></pre><p>Wat do?<br>Returns the value of the first element in the array.</p><p>How do?<br>Theoretically: “lw $3, 0($1)” (but not for realsies, since we throw $1 on the stack, blah blah blah)</p><h2 id="what-mips.array-is-doing"><a name="what-mips.array-is-doing" href="#what-mips.array-is-doing"></a>What mips.array is doing</h2><p>mips.array allocates memory on the <em>heap</em> and then calls wain with the address and the size as parameters</p><h2 id="a-second-example"><a name="a-second-example" href="#a-second-example"></a>A Second Example</h2><pre><code data-origin="<pre><code>int wain(int *a, int n) {
+    return *(a+1);
+}
+</code></pre>">int wain(int *a, int n) {
+    return *(a+1);
+}
+</code></pre><p>Wat do?<br>Returns the second element of the array.</p><p>SIDENOTE: in higher level languages, we would do <code>a[1]</code>, but that is EXACTLY EQUIVALENT to <code>*(a + 1)</code> (and by extension, also <code>*(1 + a)</code> and, if you’re a real sadist: <code>1[a]</code>)</p><h2 id="back-to-compilation-(a10p2)"><a name="back-to-compilation-(a10p2)" href="#back-to-compilation-(a10p2)"></a>Back to Compilation (A10P2)</h2><p><code>factor -&gt; NEW INT LBRACK expr RBRACK</code> — Create and Array<br><code>statement -&gt; DELETE LBRACK RBRACK expr SEMI</code> — Reclaim an array</p><p>How do?</p><p>In Prologue: link in <code>alloc.merl</code> with a <code>.import alloc.merl</code>!<br>This gives us access to a few functions:</p><ul>
+<li><code>init</code>  = initialize the heap<ul>
+<li>make sure to set $2 to<ul>
+<li>0 if wain takes (int, int)</li><li>length of the array if wain takes (int, int*)</li></ul>
+</li></ul>
+</li><li><code>new</code> = allocates an array, and returns pointer to it in $3<ul>
+<li>make sure to set $1 to the size of the array</li><li>IF UNSUCCESSFUL: returns <strong>0</strong> (<strong>NOT NULL i.e 1</strong>)<ul>
+<li>you sould make that into NULL tho</li></ul>
+</li></ul>
+</li><li><code>delete</code> = frees array<ul>
+<li>make sure $1 is the base address of what you want to free</li><li>CHECK IF IT’S NULL, and don’t try to delete if it is!<ul>
+<li>you don’t neeeed to throw an error, just don’t do it</li></ul>
+</li></ul>
+</li></ul><h2 id="pointer-arithmetic"><a name="pointer-arithmetic" href="#pointer-arithmetic"></a>Pointer Arithmetic</h2><p><code>expr1 -&gt; expr2 PLUS term</code></p><p>if expr1 is an <code>int</code>, and expr2 is an <code>int</code>, do A9 stuff.</p><p>if exp1 is an <code>int*</code>, and expr2 is an <code>int</code> (or vice versa):</p><pre><code data-origin="<pre><code>code(expr1) =   code(expr1)
+              + ... NEXT LECTURE
+</code></pre>">code(expr1) =   code(expr1)
+              + ... NEXT LECTURE
+</code></pre><h1 id="lecture-20"><a name="lecture-20" href="#lecture-20"></a>Lecture 20</h1>
 
 <footer style="position:fixed; font-size:.8em; text-align:right; bottom:0px; margin-left:-25px; height:20px; width:100%;">generated by <a href="http://pad.haroopress.com" target="_blank">haroopad</a></footer>
 </body>

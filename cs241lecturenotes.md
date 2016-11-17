@@ -2228,7 +2228,7 @@ INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBR
 
 What do the equivalent MIPS programs look like?
 
-Assuming 1st param is in $1, and 2nd param is in \$2, and return value is placed in \$3
+Assuming 1st param is in \$1, and 2nd param is in \$2, and return value is placed in \$3
 
 Well, it's either
 ```
@@ -2631,3 +2631,155 @@ code(test) =   code(GT) 			// (literallt the code to do greater than)
 ```
 
 # Lecture 19
+
+## Pointer Basics (A10P1)
+
+`factor -> NULL`
+
+Note: we want dereferencing NULL to Crash and Burn
+
+```
+code(factor) = "add $3, $11, $0"
+```
+
+If we dereference "1" we get a "unaligned word value" error, and that is good!
+
+`factor1 -> STAR factor2`
+
+We know the type of factor2 is `int*`, and that factor1 is thus a `int`
+
+```
+code(factor1) =   code(factor2) // $3 is some address
+                + "lw $3, 0($3)"
+```
+
+## Using Address-of (&)
+
+`factor -> AMP lvalue`
+
+Why, you might wonder, is the rule written this way, instead of `factor -> AMP factor`?
+
+Well, we don't want to be able to do things like:
+\- `&5 or &NULL`
+\-`&&&x` (since that would be of type `int***` which is not allowed)
+
+Considering what grammat `lvalue` can have:
+1) `lvalue -> ID` - eg: `x = ...`
+2) `lvalue -> STAR factor` - eg: `*x = ...`
+3) `lvalue -> LPAREN lvalue RPAREN` - eg: `(*x) = ...`
+
+Also, the grammar rules disallow:
+\- `x + 2 = y` - doing the algebric
+\- `7 = 4` - redefining constants
+
+## Code for &
+
+`factor1 -> AMP lvalue`
+
+We actually need to do a look ahead at what lvalue is...
+
+Three cases:
+1) `lvalue` is an identifier (eg: `&x`)
+```
+code(factor1) =   "lis $3"
+                + ".word <offset of ID>"
+                + "add $3, $29, $3"
+```
+
+2) `lvalue` is a `STAR factor2` - i.e: `&*x`
+well, `&*x == x`... sooooo
+```
+code(factor1) = code(factor2)
+```
+
+3) `lvalue` is a `LPAREN lvalue RPAREN`
+```
+trivial
+```
+
+## Assignment to pointer dereference
+
+`lvalue -> STAR factor` (eg: `*x = 4 + 9`)
+
+Let's step back and look at the rule:
+`statement -> lvalue BECOMES expr SEMI`
+
+if `lvalue == ID` do A9 stuff
+if `lvalue == STAR factor`...
+```
+code(statements) =   code(factor)     // $3 has an address
+                   + "add $6, $3, $0" // $6 has ^ addr
+                   + code(expr) 	  // $3 has expr
+                   + "sw $3, 0($6)"
+```
+
+## A "simple" WLP4 Program
+
+Running with mips.array (so \$1 = base_adress, \$2 = size)
+```
+int wain(int *a, int n) {
+	return *a;
+}
+```
+
+Wat do?
+Returns the value of the first element in the array.
+
+How do?
+Theoretically: "lw \$3, 0(\$1)" (but not for realsies, since we throw \$1 on the stack, blah blah blah)
+
+## What mips.array is doing
+
+mips.array allocates memory on the *heap* and then calls wain with the address and the size as parameters
+
+## A Second Example
+```
+int wain(int *a, int n) {
+	return *(a+1);
+}
+```
+
+Wat do?
+Returns the second element of the array.
+
+SIDENOTE: in higher level languages, we would do `a[1]`, but that is EXACTLY EQUIVALENT to `*(a + 1)` (and by extension, also `*(1 + a)` and, if you're a real sadist: `1[a]`)
+
+## Back to Compilation (A10P2)
+
+`factor -> NEW INT LBRACK expr RBRACK` -- Create and Array
+`statement -> DELETE LBRACK RBRACK expr SEMI` -- Reclaim an array
+
+How do?
+
+In Prologue: link in `alloc.merl` with a `.import alloc.merl`!
+This gives us access to a few functions:
+
+- `init`  = initialize the heap
+	- make sure to set \$2 to
+		- 0 if wain takes (int, int)
+		- length of the array if wain takes (int, int*)
+- `new` = allocates an array, and returns pointer to it in \$3
+	- make sure to set \$1 to the size of the array
+	- IF UNSUCCESSFUL: returns **0** (**NOT NULL i.e 1**)
+		- you sould make that into NULL tho
+- `delete` = frees array
+	- make sure \$1 is the base address of what you want to free
+	- CHECK IF IT'S NULL, and don't try to delete if it is!
+		- you don't neeeed to throw an error, just don't do it
+
+## Pointer Arithmetic
+
+`expr1 -> expr2 PLUS term`
+
+if expr1 is an `int`, and expr2 is an `int`, do A9 stuff.
+
+if exp1 is an `int*`, and expr2 is an `int` (or vice versa):
+```
+code(expr1) =   code(expr1)
+			  + ... NEXT LECTURE
+```
+
+
+
+
+# Lecture 20
