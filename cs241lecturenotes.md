@@ -1,4 +1,5 @@
-<script>
+
+	<script>
 (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {
@@ -2767,19 +2768,148 @@ This gives us access to a few functions:
 	- CHECK IF IT'S NULL, and don't try to delete if it is!
 		- you don't neeeed to throw an error, just don't do it
 
+# Lecture 20
+
 ## Pointer Arithmetic
 
 `expr1 -> expr2 PLUS term`
 
-if expr1 is an `int`, and expr2 is an `int`, do A9 stuff.
+if expr2 is an `int`, and term is an `int`, do A9 stuff.
 
-if exp1 is an `int*`, and expr2 is an `int` (or vice versa):
+if expr2 is an `int*`, and term is an `int` (or vice versa):
 ```
-code(expr1) =   code(expr1)
-			  + ... NEXT LECTURE
+code(expr1) =   code(expr2)
+			  + push($3)
+			  + code(term)
+			  + pop($5)
+			  + "mult $3, $4"
+			  + "mflo $3"
+			  + "add $3, $5, $3"
+```
+You need to use register \$5 in your `mult` and `mflo` if you have the reverse case
+
+`expr1 -> expr2 MINUS term`
+
+if expr2 is an `int`, and term is an `int`, do A9 stuff.
+
+if expr2 is an `int*`, and term is an `int` (NOT vice versa):
+```
+code(expr1) =   code(expr2)
+			  + push($3)
+			  + code(term)
+			  + pop($5)
+			  + "mult $3, $4"
+			  + "mflo $3"
+			  + "sub $3, $5, $3"
+			  // same as addition, but sub at the end...
+```
+if expr2 is an `int*`, and term is an `int*`:
+```
+code(expr1) =   code(expr2)
+			  + push($3)
+			  + code(term)
+			  + pop($5)
+			  + ... zoned out for a second...
 ```
 
+## Comparison of Pointers (A10P4)
+
+Aswe know, since semantic analysis passed, comparisons like `test -> expr1 LT expr2` must have the SAME types from expr1 and expr2!
+
+The only thing we actually need to change is that when we are doing pointer comparisons, we use `sltu` (unsigned) instead of `slt` (since you don't want an out-of-integer boundary error)
+
+## Procedures (A10P5+)
+
+There is an important thing we have to do when we add procedures!
+We must add a `jr` to the prologue to jump to `wain`, since the order of code generation is going to result in procedures being created first, and wain later, and as such, we have to jump to `wain` (we cannot assume that we will immediately begin executing in main anymore)
+
+## What does each procedure need to do?
+
+Each procedure has it's own Prologue and Epilogue
+Note: we still have out global pro/epilogue, these are seperate.
+
+What should these contain?
+
+## Prologue - Saving Registers
+
+The overall (naiive) idea: just save + resore *all* the registers.
+This would work... but it's kind of (very) inefficient...
+
+Better idea: just save + restore the important registers. 
+Namely: only save / restore \$31 and \$29
+
+So, suppose procedure `f` calls procedure `g`. There are 2 approaches:
+
+**Caller Save:** f (caller) saves all registers that contain important information *before* f calls g
+**Callee Save:** g (callee) saves any registers which it modifies
+
+What have we been doing so far?
+Callee Save => We saved registers at the begining, and restore at the end
+Caller Save => Saved \$31, and restored it afterwards
+
+We actually have to so a bit of both!
+
+## What about \$29?
+
+Suppose g (the callee) saves \$29
+
+i.e: g saves registers, and also sets \$29 to g's frame
+
+This is tricky, since saving registers -> changes \$30 -> set \$29 to above \$30 -> saved register below local variables -> things get complicated...
+
+Suppose f (the callee) saves \$29
+
+i.e: set \$29 to the correct spot (the top of the stack) on entering g
+
+Verdict and MIPS outline:
+
+Use f of course!
+```
+f: ...
+   // f saves the things important to it
+   push($29) // Where are my varaibles
+   push($31) // Where do I return to
+   lis $5
+   .word g
+   jalr $5
+   pop($31)
+   pop($29)
+```
+
+## Possible Errors...
+
+What if the name of a procedure matches that of a built in compiler procedure!
+eg: procedures like `while0`, or `print`, or `new`, etc...
+
+Well, simple fix: prefix all user-defined procedure names with a common prefix (essentially seperating the user-namespace and the compiler-namespace)
+So, for example, if a user defines a function `print`, we actually label it `Fprint`
+
+## Parameters
+
+Let's use Registers for Parameters!
+Nah!
+That's a shit idea! 
+What if we have more than 31 parameters...
+
+Alternatively, we could be smaht, and save our parameters on the Stack
+
+So, for `factor -> ID LPAREN arglist RPAREN`
+```
+code(factor) =   push($29)
+			   + push($31)
+			   + [ eval each arg + push arg onto stack ]
+			   + lis $5
+			   + .word <ID lexeme>
+			   + jalr $5
+			   + "pop" the args (add to $30 so it's past the args)
+			   + pop($31)
+			   + pop($29)
+```
+
+## Code for Procedure
+
+I zoned out again... 8:30 classes, amirite?
 
 
 
-# Lecture 20
+# Lecture 21
