@@ -1,5 +1,4 @@
-
-	<script>
+<script>
 (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {
@@ -2910,6 +2909,36 @@ code(factor) =   push($29)
 
 I zoned out again... 8:30 classes, amirite?
 
-
-
 # Lecture 21
+
+## Problems and Mathematical Fix
+
+Parameters and local variables are Separated by Saved Registers
+Soln: Save local variables before saving other registers
+
+Old Symbol Table vs New Symbol Table:
+
+consider function taking params a,b,c with local vars d,e,f
+We need to fix the ST to work with the "params below \$29" convention
+
+var | old | new
+- | -  | -
+a | 0  | 3
+b | -1 | 2
+c | -2 | 1
+d | -3 | 0
+e | -4 | -1
+f | -5 | -2
+
+How fix? EZ: just add the "number of parameters" to each value in the symbol table
+
+## Alternate Fix?
+
+Could have also saved all the registers in the caller, but... then we would have to do a lot of saving and restoring for every procedure call.
+
+## Optimization
+
+Not really tested => didn't take notes.
+Fascinating stuff though :D
+
+# Lecture 22
