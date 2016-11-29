@@ -2942,3 +2942,153 @@ Not really tested => didn't take notes.
 Fascinating stuff though :D
 
 # Lecture 22
+
+## Runtime memory management
+
+There are 3 things to ocnsider when talking about memory management
+1) initialization
+2) allocation
+3) reclamation
+
+On the stack, these 3 are done as follows:
+1) initialization - MAGIC (don't worry how \$30 is set...)
+2) allocation - push (decrease \$30)
+3) reclamation - pop (increase \$30)
+
+Heap usage is a bit harder...
+1) initialization - `init`
+2) allocation - `new`
+3) reclamation - `delete`
+
+How do these functions actually work?
+
+The stack is easy, it only ever gets allocated once, and reclaimed at the end.
+When allocating on the Heap though, there are many allocates and deletes, which leads to complications like *Fragmentation*
+
+## Four dimensions of heap allocation
+All of these are actually just Programming Language Design Decisions, i.e: the memory management model is not intrinsic to CS as a while, and can vary by langauge.
+
+1) fixed vs. variable sized blocks
+**fixed** = If you ask for memory, you get a fixed size of memory each time
+**variable** = you can ask for many different sizes of memory
+
+Variable has the downside of having *no guaranteed perfect implementation*
+
+2) implicit vs. explicit allocation
+3) implicit vs. explicit reclamation
+
+**implicit** = allocation happens without programmers input (no `new` statements)
+**exmplicit** = programmer explicitly satates how much memory they want, and then says when they are done with it.
+
+Common combos of (im|ex)plicit allocation:
+**explicit / explicit**: WLP4, C++, both have `new` and `delete`
+**implicit / implicit**: Racket, Lisp
+**explicit / implicit**: Garbage collected languages
+
+implicit / explicit doesn't really happen, since it would be wierd to have a program "magically" give you memory, and then force you to tell it when you are done with it...
+
+4) language / implementation -- Can pointers be relocated?
+
+## An easy case
+
+Fixed Size
+Explicit Allocation
+Explicit Reclamation
+**No** pointer reallocation
+
+![dynmem_easy.jpg](./dynmem_easy.jpg)
+
+Notice: Is a constant time op;
+
+## Being slightly more clever
+
+Instead of doing nothing, keep a **free list** (a list of blocks that have been freed)
+
+![dynmem_clever.jpg](./dynmem_clever.jpg)
+
+Back to allocate: with this change to reclamation
+
+if freelist != empty: O(1)
+\- give up first block from free list
+\- move ahead in freelist
+
+else if curr != end: O(1)
+\- give out curr and move curr ahead one
+
+else: ERROR: OUT OF MEMORY
+
+## Another way to implement this:
+
+Use parts of each allocated block to keep track of the free list...
+
+![dynmem_clever_2.jpg](./dynmem_clever_2.jpg)
+
+Costs:
+
+*allocation*: give block (3), set free to (2)
+*reclamation*: set (4) to point to (3), set free to point to (4)
+*faliure*: every block is allocated simultaneously
+*waste*: no "real" waste, other than *internal fragmentation*
+
+## Variable size blocks
+
+Life only gets more difficult.
+
+A Picture:
+
+![dynmem_var.jpg](./dynmem_var.jpg)
+
+Issues: Allocate 40 -> OUT OF MEMORY (even thought there are 60 free...)
+
+*Allocate:*
+We need to find a "hole" / "chunk" big enough
+
+*Reclaim:*
+Can we coalesce? Merge chunks together?
+
+## Fragmentation
+
+![dynmem_fragmentation.jpg](./dynmem_fragmentation.jpg)
+
+## Allocation strategies: Description
+
+**First Fit:** find the first available block which is big enough.
+**Best Fit:** find the block which has the least ammount of space beyond the requirement
+**Worst Fit:** find the block which has the **most** ammount of space beyong the requirement
+
+## Allocation strategies: Example
+
+![dynmem_allocstrat.jpg](./dynmem_allocstrat.jpg)
+
+No matter what strategy you use, none are perfect! There will always be sequences of allocates / deletes that fail on one strat, and work on antother!
+
+## Allocation strategies: Implementation
+
+**First Fit:** Search through the free list
+Naiively: **O(n)**
+Clever: **O(log(n))** using a balanced tree / skip list
+
+**Best Fit:** Find a "just big enough" piece
+This is difficult (more complicated than first fit)
+
+Also, the "waste" left behind in Best Fit is pretty useless, since it is usually "shavings" (really small blocks of memory), which usually doesn't get allocated, and therefore, piles up.
+
+**Worst Fit:** Find the biggest piece
+Using a Max-heap (CS240 for dem deets)
+
+## Deallocation
+
+Extra information is required to help with merging.
+
+So, when you ask for 10 words, alloc.merl actually uses 15, and stores some extra info before the "real" block:
+
+Cookie = "This is a start of a block"
+Prev = pointer to prev block
+Next = pointer to next block
+Length = size of block
+Alloc = flag (if currently allocated or not)
+
+
+
+
+# Lecture 23
