@@ -3080,15 +3080,161 @@ Using a Max-heap (CS240 for dem deets)
 
 Extra information is required to help with merging.
 
-So, when you ask for 10 words, alloc.merl actually uses 15, and stores some extra info before the "real" block:
+So, when you ask for **10** words, alloc.merl actually uses **15**, and stores some extra info *before* the "real" block:
 
-Cookie = "This is a start of a block"
-Prev = pointer to prev block
-Next = pointer to next block
-Length = size of block
-Alloc = flag (if currently allocated or not)
+memaddress | thing | description
+- | - | -
+0x00 | Cookie | "This is a start of a block"
+0x04 | Prev   | pointer to prev block
+0x08 | Next   | pointer to next block
+0x0c | Length | size of block
+0x10 | Alloc  | flag (if currently allocated or not)
+0x14 - ??? | "real block" | the actual useable alloc'd memory
 
+# Lecture 23 - last lecture :(
 
+## Four cases of delete
 
+![dynmem_coalesce.jpg](./dynmem_coalesce.jpg)
 
-# Lecture 23
+## Buddy System : Initialize
+
+The *buddy system* is what alloc.merl uses.
+
+Each block has two metadata features:
+\- Size: Number of words in the block
+\- Code: Identification
+
+Code length is inversely proportional to block size.
+
+The code is used to identify my "buddy"
+
+## Buddy System : Allocate
+
+![buddysys_allocate.jpg](./buddysys_allocate.jpg)
+
+*And allocate the left one of those 128 blocks.*
+
+## Buddy system : Delete
+
+![buddysys_delete.jpg](./buddysys_delete.jpg)
+
+## Deferred reclamation
+
+Heuristic: if I allocate a block of size M, then there is a goodchance that later I may ask for a block of the (same) size M.
+
+Instead of coalescing as soon as you get the chance, just leave some adjacent blocks unmerged.
+
+So, when do you coalesce? Once we reach an "OUT OF MEMORY" consition due to fragmentation (not actaully b/c we are out of memory)
+
+## Using a dual core processor
+
+If we have two cores, and we notice that we are about to hit one of these fragmentation conditions (say, around 80% full), we can dedicate 1 core to start coalescing the memory, while the other core continues to take requests for memory.
+
+This is calles "Real-time garbage collection"
+
+## An even better idea!
+
+Copywrite Gord Cormack 2010:
+"Use a non lame language" (heads up: C++ is lame)
+
+![dynmem_alternative.jpg](./dynmem_alternative.jpg)
+
+We can't pull this off in C / C++ since with pointers, we have direct access to specific memory, and we can't just shuffle around objects willy nilly.
+
+## Comparison of copy / compaction
+
+If we have a non-lame language, then one way to do this compaction is with copy / compaction.
+
+![dynmem_copycompact.jpg](./dynmem_copycompact.jpg)
+
+## Implicit reclamation
+
+recall: implicit = programmer does not indicate "delete this"
+
+Sometimes called *garbage collection* (Java does this)
+
+Traditionally:
+In the 1950s, the way they did this was using something called "mark + sweep" => "find the garbage, and reclaim it"
+
+Contemporarily:
+From the 1980s and onwards, "copy + collect" => "find the good stuff and disregard the rest"
+
+## Issues opened up
+
+How do we actually determine what's garbage vs used memory?
+
+MATH 239 / CS 240
+=> depth-first search - looking at memory / pointers as a directed graph
+=> cycle finding algos
+
+![islands_of_garbage.jpg](./islands_of_garbage.jpg)
+
+## Final words about C/C++
+
+Appel, a computer scientist, (wrote a textbook on compilers, and came up with copy / collect), said that stacks are obsolete.
+
+He proposed that all pushes should be allocates, and all pops are marking memory as deallocated (using copy and correct of course)
+
+So he made Go. golang.org.
+Go is like C, but with safe pointers and garbage collection.
+Go is a non-lame language.
+
+# A few final words about CS241
+
+## Mysteries Solved
+
+This course is supposed to make sure that there are no mysteries left about how programs are compiled and run.
+
+So, understand all the parts of the compiler (lexing, scanning, etc...), and how to run executables made of machine code (how memory works, how instructions get executes, etc..)
+
+## Languages
+
+*Languages are more similar than different.*
+If statements tend to look similar across languages, even across lisp-like vs c-like languages.
+In the end, a CPU is just sand, that can add, subtract, branch, etc... So no matter how much abstraction we throw onto that, in the end, an if-statement will always be an if statement.
+
+## Breaking down problems
+
+*the journey of a throusand miles begins with one step* - Confucius
+
+A major takeaway: Don't solve one big problem all at once. Break down problems into many smaller, manageable chunks.
+
+## Abstraction
+
+Computer science is the science of abstraction.
+
+In CS, we only try to see the big picture. 
+We want to put things into a machine, and get stuff out of that machine as easily as possible.
+
+The 1s and 0s are important, but int the end, they are only tools we use to get what we actually look for.
+
+Takeaway: only focus on details that matter, WHEN they matter.
+
+## Planning
+
+Planning is always a good idea.
+
+The first compiler was written for the langauge FORTRAN.
+It took 18 person-years to make (on a team of 4)
+
+Why did it take so long?
+Well, they didn't really have a plan going into it, and just tried to figure it out as they went.
+
+## Specs REALLY matter
+
+When all else fails, RTFM, and if there ain't no manual, gg no re.
+
+## Testing out your plan
+
+Knowing what the correct answer is helps to know if you have found the correct answer.
+
+Always test. And then test some more.
+
+## Incorrect things
+
+Don't say what is wrong with the world.
+Just say what's right and ignore the rest.
+
+# That's all folks
+## Good luck on finals!
