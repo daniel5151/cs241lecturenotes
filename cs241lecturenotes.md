@@ -1536,7 +1536,7 @@ Empty words and stacks can cause hassles
 We augment our Grammars by adding "beginning" and "ending" characters
 
 ```
-1. S' -> <START>S<END>
+1. S' -> ├S┤
 2. S -> AyB
 3. A -> ab
 4. A -> cd
@@ -1548,22 +1548,22 @@ We augment our Grammars by adding "beginning" and "ending" characters
 
 Invariant: Derivation = input already read + stack (read from top to bottom)
 
-Example of `<START>abywz<END>`
+Example of `├abywz┤`
 
 Derivation | input read | input to read | stack | actions
 -- | -- | -- | -- | --
-`S'`| $\epsilon$ | `<START>abywz<END>` | `S'` | Rule 1
-`<START>S<END>` | $\epsilon$| `<START>abywz<END>` | `<START>S<END>` | match `<START>`
-`<START>S<END>` | `<START>` | `abywz<END>` | `S<END>` | Rule 2
-`<START>AyB<END>` | `<START>` | `abywz<END>` | `AyB<END>` | Rule 3
-`<START>abyB<END>` | `<START>` | `abywz<END>` | `abyB<END>` | match a
-`<START>abyB<END>` | `<START>a` | `bywz<END>` | `byB<END>` | match b
-`<START>abyB<END>` | `<START>ab` | `ywz<END>` | `yB<END>` | match y
-`<START>abyB<END>` | `<START>aby` | `wz<END>` | `B<END>` | Rule 6
-`<START>abywz<END>` | `<START>aby` | `wz<END>` | `wz<END>` | match w
-`<START>abywz<END>` | `<START>abyw` | `z<END>` | `z<END>` | match z
-`<START>abywz<END>` | `<START>abywz` | `<END>` | `<END>` | match `<END>`
-`<START>abywz<END>` | `<START>abywz<END>` | $\epsilon$ | $\epsilon$ | ACCEPT!
+`S'`| $\epsilon$ | `├abywz┤` | `S'` | Rule 1
+`├S┤` | $\epsilon$| `├abywz┤` | `├S┤` | match `├`
+`├S┤` | `├` | `abywz┤` | `S┤` | Rule 2
+`├AyB┤` | `├` | `abywz┤` | `AyB┤` | Rule 3
+`├abyB┤` | `├` | `abywz┤` | `abyB┤` | match a
+`├abyB┤` | `├a` | `bywz┤` | `byB┤` | match b
+`├abyB┤` | `├ab` | `ywz┤` | `yB┤` | match y
+`├abyB┤` | `├aby` | `wz┤` | `B┤` | Rule 6
+`├abywz┤` | `├aby` | `wz┤` | `wz┤` | match w
+`├abywz┤` | `├abyw` | `z┤` | `z┤` | match z
+`├abywz┤` | `├abywz` | `┤` | `┤` | match `┤`
+`├abywz┤` | `├abywz┤` | $\epsilon$ | $\epsilon$ | ACCEPT!
 
 Observations:
 
@@ -1595,7 +1595,7 @@ L - leftmost derivation
 
 Recall the CFG:
 ```
-1. S' -> <START>S<END>
+1. S' -> ├S┤
 2. S -> AyB
 3. A -> ab
 4. A -> cd
@@ -1607,7 +1607,7 @@ Let "." be an error
 
 COLS are input (x). ROWS are non-terminating chars (A)
 
-|    | a | b | c | d | y | w | z | `<START>` | `<END>` |
+|    | a | b | c | d | y | w | z | `├` | `┤` |
 |----|---|---|---|---|---|---|---|---------|-------|
 | S' | . | . | . | . | . | . | . | 1       | .     |
 | S  | 2 | . | 2 | . | . | . | . | .       | .     |
@@ -1617,7 +1617,7 @@ COLS are input (x). ROWS are non-terminating chars (A)
 Adding a new rule is easy!
 Let's add `B -> epsilon`
 
-We just change ROW:B - COL:`<END>` from an error to using rule 7
+We just change ROW:B - COL:`┤` from an error to using rule 7
 
 ## Algorithm for constructing a Predictor Table
 
@@ -1709,22 +1709,22 @@ In LR/bottom-up parsing on the other hand, we hace
 \-stack + input to be read = current derivation
 \-stack is read from bottom to top
 
-## A Trace of `<START>abywz<END>`
+## A Trace of `├abywz┤`
 
 Derivaiton | Stack | Input Read | Unread Input | Action
 -|-|-|-|-
-`<START>abywz<END>`|$\epsilon$|$\epsilon$| `<START>abywz<END>` | Shift `<START>`
-`<START>abywz<END>`|`<START>`|`<START>`| `abywz<END>` | Shift `a`
-`<START>abywz<END>`|`<START>a`|`<START>a`| `bywz<END>` | Shift `b`
-`<START>abywz<END>`|`<START>ab`|`<START>ab`| `ywz<END>` | Reduce `A -> ab`
-`<START>Aywz<END>`|`<START>A`|`<START>ab`| `ywz<END>` | Shift `y`
-`<START>Aywz<END>`|`<START>Ay`|`<START>aby`| `wz<END>` | Shift `w`
-`<START>Aywz<END>`|`<START>Ayw`|`<START>abyw`| `z<END>` | Shift `z`
-`<START>Aywz<END>`|`<START>Aywz`|`<START>abywz`| `<END>` | Reduce `B -> wz`
-`<START>AyB<END>`|`<START>AyB`|`<START>abywz`| `<END>` | Reduce `S -> AyB`
-`<START>S<END>`|`<START>S`|`<START>abywz`| `<END>` | Shift `<END>`
-`<START>S<END>`|`<START>S<END>`|`<START>abywz<END>`|$\epsilon$| Reduce `S' -> S`
-`S'`|`S'`|`<START>abywz<END>`|$\epsilon$| ACCEPT
+`├abywz┤`|$\epsilon$|$\epsilon$| `├abywz┤` | Shift `├`
+`├abywz┤`|`├`|`├`| `abywz┤` | Shift `a`
+`├abywz┤`|`├a`|`├a`| `bywz┤` | Shift `b`
+`├abywz┤`|`├ab`|`├ab`| `ywz┤` | Reduce `A -> ab`
+`├Aywz┤`|`├A`|`├ab`| `ywz┤` | Shift `y`
+`├Aywz┤`|`├Ay`|`├aby`| `wz┤` | Shift `w`
+`├Aywz┤`|`├Ayw`|`├abyw`| `z┤` | Shift `z`
+`├Aywz┤`|`├Aywz`|`├abywz`| `┤` | Reduce `B -> wz`
+`├AyB┤`|`├AyB`|`├abywz`| `┤` | Reduce `S -> AyB`
+`├S┤`|`├S`|`├abywz`| `┤` | Shift `┤`
+`├S┤`|`├S┤`|`├abywz┤`|$\epsilon$| Reduce `S' -> S`
+`S'`|`S'`|`├abywz┤`|$\epsilon$| ACCEPT
 
 Shift: moving a token from one place to another (push)
 Reduce: size of the stack may be rediced (pop RHS, push LHS)
@@ -1752,7 +1752,7 @@ How to construct it:
 ## Example:
 Consider this Grammar:
 ```
-S' -> <START>E<END>
+S' -> ├E┤
 E -> E + T
 E -> T
 T -> id
@@ -1780,25 +1780,25 @@ For each input token:
 Accept if S' is on the stack when all input is read
 ```
 
-## Using the Transducer Example `<START>id+id+id<END>`
+## Using the Transducer Example `├id+id+id┤`
 
 Stack | States Visited | Input Read | Unread Input | Action
 - | - | - | - | -
-$\epsilon$ | 1 | $\epsilon$ | `<START>id+id+id<END>` | Shift `<START>`
-`<START>` | 1, 2 | `<START>` | `id+id+id<END>` | Shift `id`
-`<START>id` | 1, 2, 6 | `<START>id` | `+id+id<END>` | Reduce `T -> id`
-`<START>T` | 1, 2, 5 | `<START>id` | `+id+id+id<END>` | Reduce `E -> T`
-`<START>E` | 1, 2, 3 | `<START>id` | `+id+id+id<END>` | Shift `+`
-`<START>E+` | 1, 2, 3, 7 | `<START>id+` | `id+id<END>` | Shift `id`
-`<START>E+id` | 1, 2, 3, 7, 6 | `<START>id+id` | `+id<END>` | Reduce `T -> id`
-`<START>E+T` | 1, 2, 3, 7, 8 | `<START>id+id` | `+id<END>` | Reduce `E -> E+T`
-`<START>E` | 1, 2, 3 | `<START>id+id` | `+id<END>` | Shift +
-`<START>E+` | 1, 2, 3, 7 | `<START>id+id+` | `id<END>` | Shift id
-`<START>E+id` | 1, 2, 3, 7, 6 | `<START>id+id+id` | `<END>` | Reduce `T -> id`
-`<START>E+T` | 1, 2, 3, 7, 8 | `<START>id+id+id` | `<END>` | Reduce `E -> E + T`
-`<START>E` | 1, 2, 3 | `<START>id+id+id` | `<END>` | Shift `<END>`
-`<START>E<END>` | 1, 2, 3, 4 | `<START>id+id+id<END>` | $\epsilon$ | Reduce `S' -> <START>E<END>`
-`S'` | 1 | `<START>id+id+id<END>` | $\epsilon$ | ACCEPT
+$\epsilon$ | 1 | $\epsilon$ | `├id+id+id┤` | Shift `├`
+`├` | 1, 2 | `├` | `id+id+id┤` | Shift `id`
+`├id` | 1, 2, 6 | `├id` | `+id+id┤` | Reduce `T -> id`
+`├T` | 1, 2, 5 | `├id` | `+id+id+id┤` | Reduce `E -> T`
+`├E` | 1, 2, 3 | `├id` | `+id+id+id┤` | Shift `+`
+`├E+` | 1, 2, 3, 7 | `├id+` | `id+id┤` | Shift `id`
+`├E+id` | 1, 2, 3, 7, 6 | `├id+id` | `+id┤` | Reduce `T -> id`
+`├E+T` | 1, 2, 3, 7, 8 | `├id+id` | `+id┤` | Reduce `E -> E+T`
+`├E` | 1, 2, 3 | `├id+id` | `+id┤` | Shift +
+`├E+` | 1, 2, 3, 7 | `├id+id+` | `id┤` | Shift id
+`├E+id` | 1, 2, 3, 7, 6 | `├id+id+id` | `┤` | Reduce `T -> id`
+`├E+T` | 1, 2, 3, 7, 8 | `├id+id+id` | `┤` | Reduce `E -> E + T`
+`├E` | 1, 2, 3 | `├id+id+id` | `┤` | Shift `┤`
+`├E┤` | 1, 2, 3, 4 | `├id+id+id┤` | $\epsilon$ | Reduce `S' -> ├E┤`
+`S'` | 1 | `├id+id+id┤` | $\epsilon$ | ACCEPT
 
 ## What can go wrong? A Problem...
 
@@ -1833,7 +1833,7 @@ If any item `A -> a(dot)` occurs in a state in which it is not alone, then there
 Consider right-associative expressions. Modifying our grammar slightly to allow this (i.e: reverse RHS of second rule)
 
 ```
-S' -> <START>E<END>
+S' -> ├E┤
 E -> T + E
 E -> T
 T -> id
@@ -1843,12 +1843,12 @@ T -> id
 
 ## Parsing with Conflicts
 
-Suppose we are parsing a string that looks like `<START>id...`
+Suppose we are parsing a string that looks like `├id...`
 
 Question: Should we reduce `E -> T`?
 Answer: it deptends...
-if input is `<START>id<END>`, then yes
-if input is `<START>id+...`, then no
+if input is `├id┤`, then yes
+if input is `├id+...`, then no
 
 ## SLR(1) Parser
 
@@ -1893,7 +1893,7 @@ Each time we reduce, pop the right hand side nodes from the tree stack
 
 push the left-hand side node and make its children the nodes we just popped
 
-Example: `<START>id+id+id<END>`
+Example: `├id+id+id┤`
 
 ![lec15_diagram2.png](./lec15_diagram2.png)
 
@@ -1901,7 +1901,7 @@ Example: `<START>id+id+id<END>`
 
 Looking at L = {a^n^b^m^ | n >= m >= 0} (the non LL(k) langauge)
 ```
-1. S' -> <START>S<END>
+1. S' -> ├S┤
 2. S -> aS
 3. S -> T
 4. T -> aTb
@@ -1909,12 +1909,12 @@ Looking at L = {a^n^b^m^ | n >= m >= 0} (the non LL(k) langauge)
 ```
 
 What do we do when we see the symbol:
-`<START>` - shift
+`├` - shift
 `a` - shift
 `b` - reduce by 5 (only on the first b), then shift, then reduce by 4
-`<END>` - reduce by 3, repeatedly reduce by 2, shift, reduce by 1
+`┤` - reduce by 3, repeatedly reduce by 2, shift, reduce by 1
 
-EG: `<START>aaaabb<END>`
+EG: `├aaaabb┤`
 
 ![lec15_diagram4.png](./lec15_diagram4.png)
 

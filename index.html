@@ -2453,13 +2453,13 @@ let P = Product
 4. A -&amp;gt; cd
 5. B -&amp;gt; z
 6. B -&amp;gt; wz
-</code></pre>">1. S' -&gt; &lt;START&gt;S&lt;END&gt;
+</code></pre>">1. S' -&gt; ├S┤
 2. S -&gt; AyB
 3. A -&gt; ab
 4. A -&gt; cd
 5. B -&gt; z
 6. B -&gt; wz
-</code></pre><h2 id="top-down-parsing-with-a-stack"><a name="top-down-parsing-with-a-stack" href="#top-down-parsing-with-a-stack"></a>Top-Down parsing with a Stack</h2><p>Invariant: Derivation = input already read + stack (read from top to bottom)</p><p>Example of <code>&lt;START&gt;abywz&lt;END&gt;</code></p><table>
+</code></pre><h2 id="top-down-parsing-with-a-stack"><a name="top-down-parsing-with-a-stack" href="#top-down-parsing-with-a-stack"></a>Top-Down parsing with a Stack</h2><p>Invariant: Derivation = input already read + stack (read from top to bottom)</p><p>Example of <code>├abywz┤</code></p><table>
 <thead>
 <tr>
 <th>Derivation</th>
@@ -2473,83 +2473,83 @@ let P = Product
 <tr>
 <td><code>S'</code></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-99-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-820" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-821"><span class="mi" id="MathJax-Span-822" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-99">\epsilon</script></span></td>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
 <td><code>S'</code></td>
 <td>Rule 1</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;S&lt;END&gt;</code></td>
+<td><code>├S┤</code></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-100-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-823" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-824"><span class="mi" id="MathJax-Span-825" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-100">\epsilon</script></span></td>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;S&lt;END&gt;</code></td>
-<td>match <code>&lt;START&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td><code>├S┤</code></td>
+<td>match <code>├</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;S&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;</code></td>
-<td><code>abywz&lt;END&gt;</code></td>
-<td><code>S&lt;END&gt;</code></td>
+<td><code>├S┤</code></td>
+<td><code>├</code></td>
+<td><code>abywz┤</code></td>
+<td><code>S┤</code></td>
 <td>Rule 2</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;AyB&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;</code></td>
-<td><code>abywz&lt;END&gt;</code></td>
-<td><code>AyB&lt;END&gt;</code></td>
+<td><code>├AyB┤</code></td>
+<td><code>├</code></td>
+<td><code>abywz┤</code></td>
+<td><code>AyB┤</code></td>
 <td>Rule 3</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abyB&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;</code></td>
-<td><code>abywz&lt;END&gt;</code></td>
-<td><code>abyB&lt;END&gt;</code></td>
+<td><code>├abyB┤</code></td>
+<td><code>├</code></td>
+<td><code>abywz┤</code></td>
+<td><code>abyB┤</code></td>
 <td>match a</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abyB&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;a</code></td>
-<td><code>bywz&lt;END&gt;</code></td>
-<td><code>byB&lt;END&gt;</code></td>
+<td><code>├abyB┤</code></td>
+<td><code>├a</code></td>
+<td><code>bywz┤</code></td>
+<td><code>byB┤</code></td>
 <td>match b</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abyB&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;ab</code></td>
-<td><code>ywz&lt;END&gt;</code></td>
-<td><code>yB&lt;END&gt;</code></td>
+<td><code>├abyB┤</code></td>
+<td><code>├ab</code></td>
+<td><code>ywz┤</code></td>
+<td><code>yB┤</code></td>
 <td>match y</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abyB&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;aby</code></td>
-<td><code>wz&lt;END&gt;</code></td>
-<td><code>B&lt;END&gt;</code></td>
+<td><code>├abyB┤</code></td>
+<td><code>├aby</code></td>
+<td><code>wz┤</code></td>
+<td><code>B┤</code></td>
 <td>Rule 6</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;aby</code></td>
-<td><code>wz&lt;END&gt;</code></td>
-<td><code>wz&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td><code>├aby</code></td>
+<td><code>wz┤</code></td>
+<td><code>wz┤</code></td>
 <td>match w</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;abyw</code></td>
-<td><code>z&lt;END&gt;</code></td>
-<td><code>z&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td><code>├abyw</code></td>
+<td><code>z┤</code></td>
+<td><code>z┤</code></td>
 <td>match z</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;abywz</code></td>
-<td><code>&lt;END&gt;</code></td>
-<td><code>&lt;END&gt;</code></td>
-<td>match <code>&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td><code>├abywz</code></td>
+<td><code>┤</code></td>
+<td><code>┤</code></td>
+<td>match <code>┤</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td><code>├abywz┤</code></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-101-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-826" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-827"><span class="mi" id="MathJax-Span-828" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-101">\epsilon</script></span></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-102-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-829" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-830"><span class="mi" id="MathJax-Span-831" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-102">\epsilon</script></span></td>
 <td>ACCEPT!</td>
@@ -2567,7 +2567,7 @@ let P = Product
 4. A -&amp;gt; cd
 5. B -&amp;gt; z
 6. B -&amp;gt; wz
-</code></pre>">1. S' -&gt; &lt;START&gt;S&lt;END&gt;
+</code></pre>">1. S' -&gt; ├S┤
 2. S -&gt; AyB
 3. A -&gt; ab
 4. A -&gt; cd
@@ -2584,8 +2584,8 @@ let P = Product
 <th>y</th>
 <th>w</th>
 <th>z</th>
-<th><code>&lt;START&gt;</code></th>
-<th><code>&lt;END&gt;</code></th>
+<th><code>├</code></th>
+<th><code>┤</code></th>
 </tr>
 </thead>
 <tbody>
@@ -2638,7 +2638,7 @@ let P = Product
 <td>.</td>
 </tr>
 </tbody>
-</table><p>Adding a new rule is easy!<br>Let’s add <code>B -&gt; epsilon</code></p><p>We just change ROW:B - COL:<code>&lt;END&gt;</code> from an error to using rule 7</p><h2 id="algorithm-for-constructing-a-predictor-table"><a name="algorithm-for-constructing-a-predictor-table" href="#algorithm-for-constructing-a-predictor-table"></a>Algorithm for constructing a Predictor Table</h2><p>Below: <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-104-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-864" style="width: 7.083em; display: inline-block;"><span style="display: inline-block; position: relative; width: 5.792em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-865"><span class="mi" id="MathJax-Span-866" style="font-family: STIXGeneral; font-style: italic;">α</span><span class="mo" id="MathJax-Span-867" style="font-family: STIXGeneral;">,</span><span class="mi" id="MathJax-Span-868" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.188em;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span><span class="mo" id="MathJax-Span-869" style="font-family: STIXGeneral; padding-left: 0.313em;">∈</span><span class="mo" id="MathJax-Span-870" style="font-family: STIXGeneral; padding-left: 0.313em;">(</span><span class="mi" id="MathJax-Span-871" style="font-family: STIXGeneral; font-style: italic;">N<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.06em;"></span></span><span class="mo" id="MathJax-Span-872" style="font-family: STIXGeneral; padding-left: 0.25em;">∪</span><span class="mi" id="MathJax-Span-873" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.25em;">T<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.077em;"></span></span><span class="mo" id="MathJax-Span-874" style="font-family: STIXGeneral;">)</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-104">\alpha, \beta \in (N \cup T)</script></span>* ; <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-105-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-875" style="width: 7.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 6.23em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.627em 1000em 2.829em -0.519em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-876"><span class="mi" id="MathJax-Span-877" style="font-family: STIXGeneral; font-style: italic;">x<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mo" id="MathJax-Span-878" style="font-family: STIXGeneral;">,</span><span class="mi" id="MathJax-Span-879" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.188em;">y</span><span class="mo" id="MathJax-Span-880" style="font-family: STIXGeneral; padding-left: 0.313em;">∈</span><span class="mi" id="MathJax-Span-881" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.313em;">T<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.077em;"></span></span><span class="mo" id="MathJax-Span-882" style="font-family: STIXGeneral;">;</span><span class="mi" id="MathJax-Span-883" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.188em;">A</span><span class="mo" id="MathJax-Span-884" style="font-family: STIXGeneral; padding-left: 0.313em;">∈</span><span class="mi" id="MathJax-Span-885" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.313em;">N<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.06em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.2em; vertical-align: -0.318em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-105">x,y \in T; A \in N</script></span></p><p>Empty(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-106-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-886" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-887"><span class="mi" id="MathJax-Span-888" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-106">\alpha</script></span>) = true if <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-107-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-889" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-890"><span class="mi" id="MathJax-Span-891" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-107">\alpha</script></span> =&gt;* <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-108-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-892" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-893"><span class="mi" id="MathJax-Span-894" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-108">\epsilon</script></span><br>can <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-109-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-895" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-896"><span class="mi" id="MathJax-Span-897" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-109">\alpha</script></span> disappear?</p><p>First(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-110-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-898" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-899"><span class="mi" id="MathJax-Span-900" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-110">\alpha</script></span>) = {x | <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-111-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-901" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-902"><span class="mi" id="MathJax-Span-903" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-111">\alpha</script></span> =&gt;* x<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-112-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-904" style="width: 0.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.546em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.532em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-905"><span class="mi" id="MathJax-Span-906" style="font-family: STIXGeneral; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-112">\beta</script></span>}<br>starting from <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-113-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-907" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-908"><span class="mi" id="MathJax-Span-909" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-113">\alpha</script></span>, what can I generate as the first terminal?</p><p>Follow(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-114-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-910" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-911"><span class="mi" id="MathJax-Span-912" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-114">\alpha</script></span>) = {y | S’ =&gt;* <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-115-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-913" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-914"><span class="mi" id="MathJax-Span-915" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-115">\alpha</script></span>Ay<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-116-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-916" style="width: 0.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.546em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.532em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-917"><span class="mi" id="MathJax-Span-918" style="font-family: STIXGeneral; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-116">\beta</script></span>}<br>starting from the start symbol, does the terminal y ever appear following a non-terminal A?</p><p><strong>Predict(A,x) = { A -&gt; <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-117-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-919" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-920"><span class="mi" id="MathJax-Span-921" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-117">\alpha</script></span> | x <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-118-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-922" style="width: 0.883em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.71em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.764em 1000em 2.65em -0.432em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-923"><span class="mo" id="MathJax-Span-924" style="font-family: STIXGeneral;">∈</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.814em; vertical-align: -0.1em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-118">\in</script></span> First(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-119-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-925" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-926"><span class="mi" id="MathJax-Span-927" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-119">\alpha</script></span>) } <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-120-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-928" style="width: 0.817em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.656em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.759em 1000em 2.654em -0.444em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-929"><span class="mo" id="MathJax-Span-930" style="font-family: STIXGeneral;">∪</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.825em; vertical-align: -0.104em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-120">\cup</script></span> { A -&gt; <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-121-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-931" style="width: 0.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.546em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.532em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-932"><span class="mi" id="MathJax-Span-933" style="font-family: STIXGeneral; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-121">\beta</script></span> | x <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-122-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-934" style="width: 0.883em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.71em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.764em 1000em 2.65em -0.432em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-935"><span class="mo" id="MathJax-Span-936" style="font-family: STIXGeneral;">∈</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.814em; vertical-align: -0.1em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-122">\in</script></span> Follow(A) and Empty(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-123-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-937" style="width: 0.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.546em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.532em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-938"><span class="mi" id="MathJax-Span-939" style="font-family: STIXGeneral; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-123">\beta</script></span>) }</strong></p><h2 id="ll(1)-parsing-algorithm"><a name="ll(1)-parsing-algorithm" href="#ll(1)-parsing-algorithm"></a>LL(1) Parsing Algorithm</h2><p>Input: w</p><pre><code data-origin="<pre><code>push S'
+</table><p>Adding a new rule is easy!<br>Let’s add <code>B -&gt; epsilon</code></p><p>We just change ROW:B - COL:<code>┤</code> from an error to using rule 7</p><h2 id="algorithm-for-constructing-a-predictor-table"><a name="algorithm-for-constructing-a-predictor-table" href="#algorithm-for-constructing-a-predictor-table"></a>Algorithm for constructing a Predictor Table</h2><p>Below: <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-104-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-864" style="width: 7.083em; display: inline-block;"><span style="display: inline-block; position: relative; width: 5.792em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-865"><span class="mi" id="MathJax-Span-866" style="font-family: STIXGeneral; font-style: italic;">α</span><span class="mo" id="MathJax-Span-867" style="font-family: STIXGeneral;">,</span><span class="mi" id="MathJax-Span-868" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.188em;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span><span class="mo" id="MathJax-Span-869" style="font-family: STIXGeneral; padding-left: 0.313em;">∈</span><span class="mo" id="MathJax-Span-870" style="font-family: STIXGeneral; padding-left: 0.313em;">(</span><span class="mi" id="MathJax-Span-871" style="font-family: STIXGeneral; font-style: italic;">N<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.06em;"></span></span><span class="mo" id="MathJax-Span-872" style="font-family: STIXGeneral; padding-left: 0.25em;">∪</span><span class="mi" id="MathJax-Span-873" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.25em;">T<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.077em;"></span></span><span class="mo" id="MathJax-Span-874" style="font-family: STIXGeneral;">)</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-104">\alpha, \beta \in (N \cup T)</script></span>* ; <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-105-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-875" style="width: 7.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 6.23em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.627em 1000em 2.829em -0.519em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-876"><span class="mi" id="MathJax-Span-877" style="font-family: STIXGeneral; font-style: italic;">x<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mo" id="MathJax-Span-878" style="font-family: STIXGeneral;">,</span><span class="mi" id="MathJax-Span-879" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.188em;">y</span><span class="mo" id="MathJax-Span-880" style="font-family: STIXGeneral; padding-left: 0.313em;">∈</span><span class="mi" id="MathJax-Span-881" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.313em;">T<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.077em;"></span></span><span class="mo" id="MathJax-Span-882" style="font-family: STIXGeneral;">;</span><span class="mi" id="MathJax-Span-883" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.188em;">A</span><span class="mo" id="MathJax-Span-884" style="font-family: STIXGeneral; padding-left: 0.313em;">∈</span><span class="mi" id="MathJax-Span-885" style="font-family: STIXGeneral; font-style: italic; padding-left: 0.313em;">N<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.06em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.2em; vertical-align: -0.318em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-105">x,y \in T; A \in N</script></span></p><p>Empty(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-106-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-886" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-887"><span class="mi" id="MathJax-Span-888" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-106">\alpha</script></span>) = true if <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-107-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-889" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-890"><span class="mi" id="MathJax-Span-891" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-107">\alpha</script></span> =&gt;* <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-108-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-892" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-893"><span class="mi" id="MathJax-Span-894" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-108">\epsilon</script></span><br>can <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-109-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-895" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-896"><span class="mi" id="MathJax-Span-897" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-109">\alpha</script></span> disappear?</p><p>First(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-110-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-898" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-899"><span class="mi" id="MathJax-Span-900" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-110">\alpha</script></span>) = {x | <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-111-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-901" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-902"><span class="mi" id="MathJax-Span-903" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-111">\alpha</script></span> =&gt;* x<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-112-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-904" style="width: 0.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.546em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.532em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-905"><span class="mi" id="MathJax-Span-906" style="font-family: STIXGeneral; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-112">\beta</script></span>}<br>starting from <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-113-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-907" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-908"><span class="mi" id="MathJax-Span-909" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-113">\alpha</script></span>, what can I generate as the first terminal?</p><p>Follow(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-114-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-910" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-911"><span class="mi" id="MathJax-Span-912" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-114">\alpha</script></span>) = {y | S’ =&gt;* <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-115-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-913" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-914"><span class="mi" id="MathJax-Span-915" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-115">\alpha</script></span>Ay<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-116-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-916" style="width: 0.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.546em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.532em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-917"><span class="mi" id="MathJax-Span-918" style="font-family: STIXGeneral; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-116">\beta</script></span>}<br>starting from the start symbol, does the terminal y ever appear following a non-terminal A?</p><p><strong>Predict(A,x) = { A -&gt; <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-117-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-919" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-920"><span class="mi" id="MathJax-Span-921" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-117">\alpha</script></span> | x <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-118-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-922" style="width: 0.883em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.71em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.764em 1000em 2.65em -0.432em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-923"><span class="mo" id="MathJax-Span-924" style="font-family: STIXGeneral;">∈</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.814em; vertical-align: -0.1em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-118">\in</script></span> First(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-119-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-925" style="width: 0.75em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.601em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.465em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-926"><span class="mi" id="MathJax-Span-927" style="font-family: STIXGeneral; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-119">\alpha</script></span>) } <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-120-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-928" style="width: 0.817em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.656em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.759em 1000em 2.654em -0.444em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-929"><span class="mo" id="MathJax-Span-930" style="font-family: STIXGeneral;">∪</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.825em; vertical-align: -0.104em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-120">\cup</script></span> { A -&gt; <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-121-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-931" style="width: 0.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.546em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.532em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-932"><span class="mi" id="MathJax-Span-933" style="font-family: STIXGeneral; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-121">\beta</script></span> | x <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-122-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-934" style="width: 0.883em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.71em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.764em 1000em 2.65em -0.432em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-935"><span class="mo" id="MathJax-Span-936" style="font-family: STIXGeneral;">∈</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.814em; vertical-align: -0.1em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-122">\in</script></span> Follow(A) and Empty(<span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-123-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-937" style="width: 0.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.546em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.617em 1000em 2.828em -0.532em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-938"><span class="mi" id="MathJax-Span-939" style="font-family: STIXGeneral; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.008em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.211em; vertical-align: -0.317em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-123">\beta</script></span>) }</strong></p><h2 id="ll(1)-parsing-algorithm"><a name="ll(1)-parsing-algorithm" href="#ll(1)-parsing-algorithm"></a>LL(1) Parsing Algorithm</h2><p>Input: w</p><pre><code data-origin="<pre><code>push S'
 for each x in w:
     while (top of stack is some A in N):
         pop A
@@ -2694,7 +2694,7 @@ U is "unbalanced a and b"
 4. B -&gt; aBb
 5. U -&gt; aB
 6. U -&gt; aU
-</code></pre><p>This language is actually not LL(k) for <em>Any</em> k!</p><h1 id="lecture-14"><a name="lecture-14" href="#lecture-14"></a>Lecture 14</h1><h2 id="bottom-up-parsing-(lr-parsing)"><a name="bottom-up-parsing-(lr-parsing)" href="#bottom-up-parsing-(lr-parsing)"></a>Bottom-up parsing (LR parsing)</h2><p>In LL/top-down parsing we have<br>- input processed + stack = current derivation<br>- note that the stack is read from top to bottom</p><p>In LR/bottom-up parsing on the other hand, we hace<br>-stack + input to be read = current derivation<br>-stack is read from bottom to top</p><h2 id="a-trace-of-`abywz`"><a name="a-trace-of-`abywz`" href="#a-trace-of-`abywz`"></a>A Trace of <code>&lt;START&gt;abywz&lt;END&gt;</code></h2><table>
+</code></pre><p>This language is actually not LL(k) for <em>Any</em> k!</p><h1 id="lecture-14"><a name="lecture-14" href="#lecture-14"></a>Lecture 14</h1><h2 id="bottom-up-parsing-(lr-parsing)"><a name="bottom-up-parsing-(lr-parsing)" href="#bottom-up-parsing-(lr-parsing)"></a>Bottom-up parsing (LR parsing)</h2><p>In LL/top-down parsing we have<br>- input processed + stack = current derivation<br>- note that the stack is read from top to bottom</p><p>In LR/bottom-up parsing on the other hand, we hace<br>-stack + input to be read = current derivation<br>-stack is read from bottom to top</p><h2 id="a-trace-of-`abywz`"><a name="a-trace-of-`abywz`" href="#a-trace-of-`abywz`"></a>A Trace of <code>├abywz┤</code></h2><table>
 <thead>
 <tr>
 <th>Derivaiton</th>
@@ -2706,86 +2706,86 @@ U is "unbalanced a and b"
 </thead>
 <tbody>
 <tr>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-124-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-940" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-941"><span class="mi" id="MathJax-Span-942" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-124">\epsilon</script></span></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-125-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-943" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-944"><span class="mi" id="MathJax-Span-945" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-125">\epsilon</script></span></td>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td>Shift <code>&lt;START&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td>Shift <code>├</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;</code></td>
-<td><code>&lt;START&gt;</code></td>
-<td><code>abywz&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td><code>├</code></td>
+<td><code>├</code></td>
+<td><code>abywz┤</code></td>
 <td>Shift <code>a</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;a</code></td>
-<td><code>&lt;START&gt;a</code></td>
-<td><code>bywz&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td><code>├a</code></td>
+<td><code>├a</code></td>
+<td><code>bywz┤</code></td>
 <td>Shift <code>b</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;ab</code></td>
-<td><code>&lt;START&gt;ab</code></td>
-<td><code>ywz&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
+<td><code>├ab</code></td>
+<td><code>├ab</code></td>
+<td><code>ywz┤</code></td>
 <td>Reduce <code>A -&gt; ab</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;Aywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;A</code></td>
-<td><code>&lt;START&gt;ab</code></td>
-<td><code>ywz&lt;END&gt;</code></td>
+<td><code>├Aywz┤</code></td>
+<td><code>├A</code></td>
+<td><code>├ab</code></td>
+<td><code>ywz┤</code></td>
 <td>Shift <code>y</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;Aywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;Ay</code></td>
-<td><code>&lt;START&gt;aby</code></td>
-<td><code>wz&lt;END&gt;</code></td>
+<td><code>├Aywz┤</code></td>
+<td><code>├Ay</code></td>
+<td><code>├aby</code></td>
+<td><code>wz┤</code></td>
 <td>Shift <code>w</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;Aywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;Ayw</code></td>
-<td><code>&lt;START&gt;abyw</code></td>
-<td><code>z&lt;END&gt;</code></td>
+<td><code>├Aywz┤</code></td>
+<td><code>├Ayw</code></td>
+<td><code>├abyw</code></td>
+<td><code>z┤</code></td>
 <td>Shift <code>z</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;Aywz&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;Aywz</code></td>
-<td><code>&lt;START&gt;abywz</code></td>
-<td><code>&lt;END&gt;</code></td>
+<td><code>├Aywz┤</code></td>
+<td><code>├Aywz</code></td>
+<td><code>├abywz</code></td>
+<td><code>┤</code></td>
 <td>Reduce <code>B -&gt; wz</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;AyB&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;AyB</code></td>
-<td><code>&lt;START&gt;abywz</code></td>
-<td><code>&lt;END&gt;</code></td>
+<td><code>├AyB┤</code></td>
+<td><code>├AyB</code></td>
+<td><code>├abywz</code></td>
+<td><code>┤</code></td>
 <td>Reduce <code>S -&gt; AyB</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;S&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;S</code></td>
-<td><code>&lt;START&gt;abywz</code></td>
-<td><code>&lt;END&gt;</code></td>
-<td>Shift <code>&lt;END&gt;</code></td>
+<td><code>├S┤</code></td>
+<td><code>├S</code></td>
+<td><code>├abywz</code></td>
+<td><code>┤</code></td>
+<td>Shift <code>┤</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;S&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;S&lt;END&gt;</code></td>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
+<td><code>├S┤</code></td>
+<td><code>├S┤</code></td>
+<td><code>├abywz┤</code></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-126-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-946" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-947"><span class="mi" id="MathJax-Span-948" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-126">\epsilon</script></span></td>
 <td>Reduce <code>S' -&gt; S</code></td>
 </tr>
 <tr>
 <td><code>S'</code></td>
 <td><code>S'</code></td>
-<td><code>&lt;START&gt;abywz&lt;END&gt;</code></td>
+<td><code>├abywz┤</code></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-127-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-949" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-950"><span class="mi" id="MathJax-Span-951" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-127">\epsilon</script></span></td>
 <td>ACCEPT</td>
 </tr>
@@ -2794,7 +2794,7 @@ U is "unbalanced a and b"
 E -&amp;gt; E + T
 E -&amp;gt; T
 T -&amp;gt; id
-</code></pre>">S' -&gt; &lt;START&gt;E&lt;END&gt;
+</code></pre>">S' -&gt; ├E┤
 E -&gt; E + T
 E -&gt; T
 T -&gt; id
@@ -2824,7 +2824,7 @@ Accept if S' is on the stack when all input is read
             follow teh transitions for the LHS
             push the LHS onto the stack
 Accept if S' is on the stack when all input is read
-</code></pre><h2 id="using-the-transducer-example-`id+id+id`"><a name="using-the-transducer-example-`id+id+id`" href="#using-the-transducer-example-`id+id+id`"></a>Using the Transducer Example <code>&lt;START&gt;id+id+id&lt;END&gt;</code></h2><table>
+</code></pre><h2 id="using-the-transducer-example-`id+id+id`"><a name="using-the-transducer-example-`id+id+id`" href="#using-the-transducer-example-`id+id+id`"></a>Using the Transducer Example <code>├id+id+id┤</code></h2><table>
 <thead>
 <tr>
 <th>Stack</th>
@@ -2839,104 +2839,104 @@ Accept if S' is on the stack when all input is read
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-134-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-970" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-971"><span class="mi" id="MathJax-Span-972" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-134">\epsilon</script></span></td>
 <td>1</td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-135-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-973" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-974"><span class="mi" id="MathJax-Span-975" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-135">\epsilon</script></span></td>
-<td><code>&lt;START&gt;id+id+id&lt;END&gt;</code></td>
-<td>Shift <code>&lt;START&gt;</code></td>
+<td><code>├id+id+id┤</code></td>
+<td>Shift <code>├</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;</code></td>
+<td><code>├</code></td>
 <td>1, 2</td>
-<td><code>&lt;START&gt;</code></td>
-<td><code>id+id+id&lt;END&gt;</code></td>
+<td><code>├</code></td>
+<td><code>id+id+id┤</code></td>
 <td>Shift <code>id</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;id</code></td>
+<td><code>├id</code></td>
 <td>1, 2, 6</td>
-<td><code>&lt;START&gt;id</code></td>
-<td><code>+id+id&lt;END&gt;</code></td>
+<td><code>├id</code></td>
+<td><code>+id+id┤</code></td>
 <td>Reduce <code>T -&gt; id</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;T</code></td>
+<td><code>├T</code></td>
 <td>1, 2, 5</td>
-<td><code>&lt;START&gt;id</code></td>
-<td><code>+id+id+id&lt;END&gt;</code></td>
+<td><code>├id</code></td>
+<td><code>+id+id+id┤</code></td>
 <td>Reduce <code>E -&gt; T</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E</code></td>
+<td><code>├E</code></td>
 <td>1, 2, 3</td>
-<td><code>&lt;START&gt;id</code></td>
-<td><code>+id+id+id&lt;END&gt;</code></td>
+<td><code>├id</code></td>
+<td><code>+id+id+id┤</code></td>
 <td>Shift <code>+</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E+</code></td>
+<td><code>├E+</code></td>
 <td>1, 2, 3, 7</td>
-<td><code>&lt;START&gt;id+</code></td>
-<td><code>id+id&lt;END&gt;</code></td>
+<td><code>├id+</code></td>
+<td><code>id+id┤</code></td>
 <td>Shift <code>id</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E+id</code></td>
+<td><code>├E+id</code></td>
 <td>1, 2, 3, 7, 6</td>
-<td><code>&lt;START&gt;id+id</code></td>
-<td><code>+id&lt;END&gt;</code></td>
+<td><code>├id+id</code></td>
+<td><code>+id┤</code></td>
 <td>Reduce <code>T -&gt; id</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E+T</code></td>
+<td><code>├E+T</code></td>
 <td>1, 2, 3, 7, 8</td>
-<td><code>&lt;START&gt;id+id</code></td>
-<td><code>+id&lt;END&gt;</code></td>
+<td><code>├id+id</code></td>
+<td><code>+id┤</code></td>
 <td>Reduce <code>E -&gt; E+T</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E</code></td>
+<td><code>├E</code></td>
 <td>1, 2, 3</td>
-<td><code>&lt;START&gt;id+id</code></td>
-<td><code>+id&lt;END&gt;</code></td>
+<td><code>├id+id</code></td>
+<td><code>+id┤</code></td>
 <td>Shift +</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E+</code></td>
+<td><code>├E+</code></td>
 <td>1, 2, 3, 7</td>
-<td><code>&lt;START&gt;id+id+</code></td>
-<td><code>id&lt;END&gt;</code></td>
+<td><code>├id+id+</code></td>
+<td><code>id┤</code></td>
 <td>Shift id</td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E+id</code></td>
+<td><code>├E+id</code></td>
 <td>1, 2, 3, 7, 6</td>
-<td><code>&lt;START&gt;id+id+id</code></td>
-<td><code>&lt;END&gt;</code></td>
+<td><code>├id+id+id</code></td>
+<td><code>┤</code></td>
 <td>Reduce <code>T -&gt; id</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E+T</code></td>
+<td><code>├E+T</code></td>
 <td>1, 2, 3, 7, 8</td>
-<td><code>&lt;START&gt;id+id+id</code></td>
-<td><code>&lt;END&gt;</code></td>
+<td><code>├id+id+id</code></td>
+<td><code>┤</code></td>
 <td>Reduce <code>E -&gt; E + T</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E</code></td>
+<td><code>├E</code></td>
 <td>1, 2, 3</td>
-<td><code>&lt;START&gt;id+id+id</code></td>
-<td><code>&lt;END&gt;</code></td>
-<td>Shift <code>&lt;END&gt;</code></td>
+<td><code>├id+id+id</code></td>
+<td><code>┤</code></td>
+<td>Shift <code>┤</code></td>
 </tr>
 <tr>
-<td><code>&lt;START&gt;E&lt;END&gt;</code></td>
+<td><code>├E┤</code></td>
 <td>1, 2, 3, 4</td>
-<td><code>&lt;START&gt;id+id+id&lt;END&gt;</code></td>
+<td><code>├id+id+id┤</code></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-136-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-976" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-977"><span class="mi" id="MathJax-Span-978" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-136">\epsilon</script></span></td>
-<td>Reduce <code>S' -&gt; &lt;START&gt;E&lt;END&gt;</code></td>
+<td>Reduce <code>S' -&gt; ├E┤</code></td>
 </tr>
 <tr>
 <td><code>S'</code></td>
 <td>1</td>
-<td><code>&lt;START&gt;id+id+id&lt;END&gt;</code></td>
+<td><code>├id+id+id┤</code></td>
 <td><span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-137-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-979" style="width: 0.617em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.492em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.854em 1000em 2.634em -0.462em); top: -2.459em; left: 0em;"><span class="mrow" id="MathJax-Span-980"><span class="mi" id="MathJax-Span-981" style="font-family: STIXGeneral; font-style: italic;">ϵ</span></span><span style="display: inline-block; width: 0px; height: 2.459em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 0.685em; vertical-align: -0.08em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-137">\epsilon</script></span></td>
 <td>ACCEPT</td>
 </tr>
@@ -2953,21 +2953,21 @@ B -&gt; b(dot)
 E -&amp;gt; T + E
 E -&amp;gt; T
 T -&amp;gt; id
-</code></pre>">S' -&gt; &lt;START&gt;E&lt;END&gt;
+</code></pre>">S' -&gt; ├E┤
 E -&gt; T + E
 E -&gt; T
 T -&gt; id
-</code></pre><p><img src="lec15_diagram1.png" alt="lec15_diagram1.png"></p><h2 id="parsing-with-conflicts"><a name="parsing-with-conflicts" href="#parsing-with-conflicts"></a>Parsing with Conflicts</h2><p>Suppose we are parsing a string that looks like <code>&lt;START&gt;id...</code></p><p>Question: Should we reduce <code>E -&gt; T</code>?<br>Answer: it deptends…<br>if input is <code>&lt;START&gt;id&lt;END&gt;</code>, then yes<br>if input is <code>&lt;START&gt;id+...</code>, then no</p><h2 id="slr(1)-parser"><a name="slr(1)-parser" href="#slr(1)-parser"></a>SLR(1) Parser</h2><p>When we add this one lookahead character of a lookahead, we have an SLR(1) parser (SLR(1) = Simple LR with 1 character of lookahead)<br>SLR(1) resolves many, but not all, conflicts<br>- LR(1) parsing is more sopfisticated than SLR(1) parsers<br>- LR(1) parses strictly more grammars<br>- LR(1) automation is more complex<br>- LR(1) and SLR(1) are identical parsing algorithms, the only difference is in the respecting outomation they create<br>There is also a parser called LALR(1) which falls between SLR(1) and LR(1). LALR(1) = Lookahead LR(1)</p><h2 id="making-this-more-efficient"><a name="making-this-more-efficient" href="#making-this-more-efficient"></a>Making this more efficient</h2><p>Current running time of this algorithm: O(|w|<sup>2</sup>)</p><p>Instead of scanning the stack each time, we can instead store (input, state) on the stack<br>Start the transducer in state @ the top of the stack</p><p>Running time is not only O(|w|)</p><h2 id="outputting-a-derivation"><a name="outputting-a-derivation" href="#outputting-a-derivation"></a>Outputting a Derivation</h2><p>In top down parsing: output the rules  used to expand by<br>In bottom-up parsing: It’s simple: every thime we do a reduction, just output the rule. BUT this isn’t quite right, since Derivations should start with the Start symbol, but with Bottom Up parsing, this is not the case… A Simple Observation</p><p>Didn’t we say that this was LR(1) parsing?<br>Yep! LR(0) and SLR(1) are both contained within LR(1)</p><p>Doesn’t “R” mean rightmost derivation?<br>Yep!</p><p>Aren’t ew always reducing the leftmost non-terminal?<br>Yes, but that is hard to see.</p><p>Notice the direction we are creating the derivation…<br>Write the derivation in reverse.</p><h2 id="outputting-the-parse-tree"><a name="outputting-the-parse-tree" href="#outputting-the-parse-tree"></a>Outputting the Parse Tree</h2><p>Create a “tree stack”</p><p>Each time we reduce, pop the right hand side nodes from the tree stack</p><p>push the left-hand side node and make its children the nodes we just popped</p><p>Example: <code>&lt;START&gt;id+id+id&lt;END&gt;</code></p><p><img src="lec15_diagram2.png" alt="lec15_diagram2.png"></p><h2 id="going-back"><a name="going-back" href="#going-back"></a>Going Back</h2><p>Looking at L = {a<sup>n</sup>b<sup>m</sup> | n &gt;= m &gt;= 0} (the non LL(k) langauge)</p><pre><code data-origin="<pre><code>1. S' -&amp;gt; &amp;lt;START&amp;gt;S&amp;lt;END&amp;gt;
+</code></pre><p><img src="lec15_diagram1.png" alt="lec15_diagram1.png"></p><h2 id="parsing-with-conflicts"><a name="parsing-with-conflicts" href="#parsing-with-conflicts"></a>Parsing with Conflicts</h2><p>Suppose we are parsing a string that looks like <code>├id...</code></p><p>Question: Should we reduce <code>E -&gt; T</code>?<br>Answer: it deptends…<br>if input is <code>├id┤</code>, then yes<br>if input is <code>├id+...</code>, then no</p><h2 id="slr(1)-parser"><a name="slr(1)-parser" href="#slr(1)-parser"></a>SLR(1) Parser</h2><p>When we add this one lookahead character of a lookahead, we have an SLR(1) parser (SLR(1) = Simple LR with 1 character of lookahead)<br>SLR(1) resolves many, but not all, conflicts<br>- LR(1) parsing is more sopfisticated than SLR(1) parsers<br>- LR(1) parses strictly more grammars<br>- LR(1) automation is more complex<br>- LR(1) and SLR(1) are identical parsing algorithms, the only difference is in the respecting outomation they create<br>There is also a parser called LALR(1) which falls between SLR(1) and LR(1). LALR(1) = Lookahead LR(1)</p><h2 id="making-this-more-efficient"><a name="making-this-more-efficient" href="#making-this-more-efficient"></a>Making this more efficient</h2><p>Current running time of this algorithm: O(|w|<sup>2</sup>)</p><p>Instead of scanning the stack each time, we can instead store (input, state) on the stack<br>Start the transducer in state @ the top of the stack</p><p>Running time is not only O(|w|)</p><h2 id="outputting-a-derivation"><a name="outputting-a-derivation" href="#outputting-a-derivation"></a>Outputting a Derivation</h2><p>In top down parsing: output the rules  used to expand by<br>In bottom-up parsing: It’s simple: every thime we do a reduction, just output the rule. BUT this isn’t quite right, since Derivations should start with the Start symbol, but with Bottom Up parsing, this is not the case… A Simple Observation</p><p>Didn’t we say that this was LR(1) parsing?<br>Yep! LR(0) and SLR(1) are both contained within LR(1)</p><p>Doesn’t “R” mean rightmost derivation?<br>Yep!</p><p>Aren’t ew always reducing the leftmost non-terminal?<br>Yes, but that is hard to see.</p><p>Notice the direction we are creating the derivation…<br>Write the derivation in reverse.</p><h2 id="outputting-the-parse-tree"><a name="outputting-the-parse-tree" href="#outputting-the-parse-tree"></a>Outputting the Parse Tree</h2><p>Create a “tree stack”</p><p>Each time we reduce, pop the right hand side nodes from the tree stack</p><p>push the left-hand side node and make its children the nodes we just popped</p><p>Example: <code>├id+id+id┤</code></p><p><img src="lec15_diagram2.png" alt="lec15_diagram2.png"></p><h2 id="going-back"><a name="going-back" href="#going-back"></a>Going Back</h2><p>Looking at L = {a<sup>n</sup>b<sup>m</sup> | n &gt;= m &gt;= 0} (the non LL(k) langauge)</p><pre><code data-origin="<pre><code>1. S' -&amp;gt; &amp;lt;START&amp;gt;S&amp;lt;END&amp;gt;
 2. S -&amp;gt; aS
 3. S -&amp;gt; T
 4. T -&amp;gt; aTb
 5. T -&amp;gt; \epsilon
-</code></pre>">1. S' -&gt; &lt;START&gt;S&lt;END&gt;
+</code></pre>">1. S' -&gt; ├S┤
 2. S -&gt; aS
 3. S -&gt; T
 4. T -&gt; aTb
 5. T -&gt; \epsilon
-</code></pre><p>What do we do when we see the symbol:<br><code>&lt;START&gt;</code> - shift<br><code>a</code> - shift<br><code>b</code> - reduce by 5 (only on the first b), then shift, then reduce by 4<br><code>&lt;END&gt;</code> - reduce by 3, repeatedly reduce by 2, shift, reduce by 1</p><p>EG: <code>&lt;START&gt;aaaabb&lt;END&gt;</code></p><p><img src="lec15_diagram4.png" alt="lec15_diagram4.png"></p><h2 id="fun-facts"><a name="fun-facts" href="#fun-facts"></a>Fun Facts</h2><p>Theorum: For any augmented LR(1) grammar, there is an equivalent LR(0) grammar</p><p>Theorem: The class of languages that can be parsed deterministically with a stack can be represented with an LR(1) grammar</p><h1 id="lecture-16"><a name="lecture-16" href="#lecture-16"></a>Lecture 16</h1><h2 id="big-picture-of-wlp4-compilation"><a name="big-picture-of-wlp4-compilation" href="#big-picture-of-wlp4-compilation"></a>Big Picture of WLP4 Compilation</h2><p><img src="compilation_big_picture.png" alt="compilation_big_picture.png"></p><h4 id="zooming-into-the-compiler:"><a name="zooming-into-the-compiler:" href="#zooming-into-the-compiler:"></a>Zooming into the compiler:</h4><p><img src="compiler.png" alt="compiler.png"></p><p>Recall:<br>Lexical = If you are using valid <em>words</em> (not neccessarily order)<br>Syntactic = If you are using the right words in the <em>right order</em><br>Semantic = If you are using the right words in the right order <em>with respect to other special rules</em></p><h2 id="example:"><a name="example:" href="#example:"></a>Example:</h2><p>Consider the input file</p><pre class="cpp hljs"><code class="cpp" data-origin="<pre><code class=&quot;cpp&quot;>int wain (int a, int b) {
+</code></pre><p>What do we do when we see the symbol:<br><code>├</code> - shift<br><code>a</code> - shift<br><code>b</code> - reduce by 5 (only on the first b), then shift, then reduce by 4<br><code>┤</code> - reduce by 3, repeatedly reduce by 2, shift, reduce by 1</p><p>EG: <code>├aaaabb┤</code></p><p><img src="lec15_diagram4.png" alt="lec15_diagram4.png"></p><h2 id="fun-facts"><a name="fun-facts" href="#fun-facts"></a>Fun Facts</h2><p>Theorum: For any augmented LR(1) grammar, there is an equivalent LR(0) grammar</p><p>Theorem: The class of languages that can be parsed deterministically with a stack can be represented with an LR(1) grammar</p><h1 id="lecture-16"><a name="lecture-16" href="#lecture-16"></a>Lecture 16</h1><h2 id="big-picture-of-wlp4-compilation"><a name="big-picture-of-wlp4-compilation" href="#big-picture-of-wlp4-compilation"></a>Big Picture of WLP4 Compilation</h2><p><img src="compilation_big_picture.png" alt="compilation_big_picture.png"></p><h4 id="zooming-into-the-compiler:"><a name="zooming-into-the-compiler:" href="#zooming-into-the-compiler:"></a>Zooming into the compiler:</h4><p><img src="compiler.png" alt="compiler.png"></p><p>Recall:<br>Lexical = If you are using valid <em>words</em> (not neccessarily order)<br>Syntactic = If you are using the right words in the <em>right order</em><br>Semantic = If you are using the right words in the right order <em>with respect to other special rules</em></p><h2 id="example:"><a name="example:" href="#example:"></a>Example:</h2><p>Consider the input file</p><pre class="cpp hljs"><code class="cpp" data-origin="<pre><code class=&quot;cpp&quot;>int wain (int a, int b) {
     return a;
 }
 </code></pre>"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">wain</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span> </span>{
