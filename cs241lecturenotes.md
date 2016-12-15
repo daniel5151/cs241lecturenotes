@@ -2941,6 +2941,8 @@ Could have also saved all the registers in the caller, but... then we would have
 Not really tested => didn't take notes.
 Fascinating stuff though :D
 
+**OH CRAP. THIS IS BIENG TESTED. RIP. GLHF**
+
 # Lecture 22
 
 ## Runtime memory management
